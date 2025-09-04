@@ -25,7 +25,7 @@ export default function Landing() {
       <div className="stack">
         <div>
           <Header className="title">What you’ve created is valuable. Let the right buyer see its worth.</Header>
-          <SubHeader className="subtitle">A carefully selected marketplace for SaaS startups valued between $10K and $100K.</SubHeader>
+          <SubHeader className="subtitle">Buy and sell profitable bootstrapped micro-SaaS. Premium-Vetted listings, clear metrics, human review.</SubHeader>
         </div>
         <Row role="group" aria-label="Choose form">
           <button className="button" onClick={() => navigate("/sell")}>I am selling</button>

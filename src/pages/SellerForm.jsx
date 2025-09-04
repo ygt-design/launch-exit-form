@@ -89,8 +89,8 @@ export default function SellerForm() {
     <div className="container">
       <div className="stack">
         <div>
-          <h1 className="title" style={{ fontSize: 24, margin: 0 }}>Seller waitlist</h1>
-          <p className="subtitle" style={{ margin: "6px 0 0" }}>Tell us about your startup.</p>
+          <h1 className="title" style={{ fontSize: 24, margin: 0 }}>Exit without hassle. Focus on what’s next.</h1>
+          <p className="subtitle" style={{ margin: "6px 0 0" }}>Join early. Earn a badge and priority visibility on launch day.</p>
         </div>
         <div className="card">
           <Form onSubmit={onSubmit} noValidate>
@@ -134,7 +134,7 @@ export default function SellerForm() {
               {touched.category && !form.category && <span className="error-text">Please select a category.</span>}
             </Section>
             <div>
-              <button className="button" type="submit" disabled={!(form.email && form.startupName && form.productUrl && form.stage && form.mrr && form.category)}>Join seller waitlist</button>
+              <button className="button" type="submit" disabled={!(form.email && form.startupName && form.productUrl && form.stage && form.mrr && form.category)}>Join as a Seller</button>
             </div>
           </Form>
         </div>

@@ -97,8 +97,8 @@ export default function BuyerForm() {
     <div className="container">
       <div className="stack">
         <div>
-          <h1 className="title" style={{ fontSize: 24, margin: 0 }}>Buyer waitlist</h1>
-          <p className="subtitle" style={{ margin: "6px 0 0" }}>Tell us what you are looking for.</p>
+          <h1 className="title" style={{ fontSize: 24, margin: 0 }}>Acquire proven SaaS, <br>without any surprises.</br></h1>
+          <p className="subtitle" style={{ margin: "6px 0 0" }}>Unlock premium access to vetted micro-SaaS deals. Carefully reviewed listings with transparent, verified metrics.</p>
         </div>
         <div className="card">
           <Form onSubmit={onSubmit} noValidate>
@@ -148,7 +148,7 @@ export default function BuyerForm() {
               {touched.categories && form.categories.length === 0 && <span className="error-text">Select at least one category.</span>}
             </Section>
             <div>
-              <button className="button" type="submit" disabled={!(form.email && form.buyerType && form.dealSize && form.timeline && form.categories.length > 0)}>Join buyer waitlist</button>
+              <button className="button" type="submit" disabled={!(form.email && form.buyerType && form.dealSize && form.timeline && form.categories.length > 0)}>Join as a Buyer</button>
             </div>
           </Form>
         </div>
