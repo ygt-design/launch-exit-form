@@ -5,11 +5,13 @@ import SellerForm from './pages/SellerForm.jsx'
 import BuyerForm from './pages/BuyerForm.jsx'
 import Confirmation from './pages/Confirmation.jsx'
 import { GlobalStyle } from './styles/GlobalStyle.js'
+import Navbar from './components/Navbar.jsx'
 
 export default function App() {
   return (
     <>
       <GlobalStyle />
+      <Navbar />
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/sell" element={<SellerForm />} />
