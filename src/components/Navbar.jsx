@@ -15,7 +15,6 @@ const Inner = styled.div`
   width: 100%;
   max-width: 100%;
   margin: 0 auto;
-  padding: 0 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -34,7 +33,7 @@ const Island = styled.div`
   -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 6px 20px rgba(0,0,0,0.25);
   pointer-events: auto;
-  width: min(800px, calc(100% + 10px));
+  width: min(700px, 100% - 24px);
 `
 
 const Logo = styled.img`
