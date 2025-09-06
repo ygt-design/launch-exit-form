@@ -47,16 +47,18 @@ const Dot = styled.span`
 `
 
 export default function TextCarousel() {
-  const text = 'Exclusive Perks for Early Sellers & Buyers'
-  const items = Array.from({ length: 14 })
+  const phrases = [
+    'Exclusive Perks for Early Sellers & Buyers',
+    'LaunchExit — Premium‑vetted micro‑SaaS • Transparent metrics • Human review',
+  ]
 
   return (
     <Wrapper aria-label="text carousel">
       <Marquee gradient={false} speed={32} pauseOnHover={false} direction="right" autoFill>
-        {items.map((_, i) => (
+        {phrases.map((t, i) => (
           <div key={i} style={{ display: 'inline-block', marginRight: 24 }}>
             <Strip>
-              <Phrase>{text}</Phrase>
+              <Phrase>{t}</Phrase>
               <Dot aria-hidden="true" />
             </Strip>
           </div>
