@@ -5,10 +5,10 @@ import { Autoplay } from 'swiper/modules'
 import 'swiper/css'
 
 const Wrapper = styled.div`
-  width: 100vw;
-  max-width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
+  width: 100svw;
+  max-width: 100svw;
+  margin-left: calc(50% - 50svw);
+  margin-right: calc(50% - 50svw);
   overflow: hidden;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
@@ -22,10 +22,10 @@ const Wrapper = styled.div`
 const Strip = styled.div`
   display: flex;
   align-items: center;
-  gap: 24px;
-  padding: 15px 0;
+  gap: 20px;
+  padding: 12px 0;
 
-  @media (min-width: 768px) { gap: 32px; padding: 14px 0; }
+  @media (min-width: 768px) { gap: 28px; padding: 14px 0; }
   @media (min-width: 1024px) { gap: 40px; padding: 16px 0; }
 `
 

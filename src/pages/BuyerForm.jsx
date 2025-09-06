@@ -84,6 +84,31 @@ const LabelText = styled.span`
   transition: opacity 160ms ease;
 `;
 
+// Contemporary multi-select chip
+const CategoryOption = styled.label`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #111315;
+  cursor: pointer;
+  user-select: none;
+  color: var(--foreground);
+  font-size: 14px;
+  transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease, color 180ms ease;
+  
+  &:hover { border-color: rgba(255, 0, 168, 0.35); }
+  &:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(255, 0, 168, 0.15); }
+  
+  &[data-checked="true"] {
+    border-color: rgba(255, 0, 168, 0.65);
+    background: #18101c;
+    color: #ffffff;
+  }
+`;
+
 const { buyerTypes, dealSizes, timelines, categories } = buyerData;
 
 export default function BuyerForm() {
@@ -217,15 +242,22 @@ export default function BuyerForm() {
             </Section>
             <Section className="control">
               <Label>Preferred categories</Label>
-              <div className="checkbox-group">
+              <div className="checkbox-group" style={{ gap: 10 }}>
                 {categories.map(c => {
                   const id = `cat-${c}`;
                   const checked = form.categories.includes(c);
                   return (
-                    <label key={c} htmlFor={id} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14 }}>
-                      <input id={id} type="checkbox" className="checkbox" checked={checked} onChange={() => toggleCategory(c)} />
+                    <CategoryOption key={c} htmlFor={id} data-checked={checked ? "true" : undefined}>
+                      <input
+                        id={id}
+                        type="checkbox"
+                        className="checkbox"
+                        checked={checked}
+                        onChange={() => toggleCategory(c)}
+                        style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: 0, height: 0 }}
+                      />
                       <span>{c}</span>
-                    </label>
+                    </CategoryOption>
                   );
                 })}
               </div>

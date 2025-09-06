@@ -7,10 +7,10 @@ import ListingCard from './ListingCard.jsx'
 import listingsData from '../data/listings.json'
 
 const Wrapper = styled.div`
-  width: 100vw;
-  max-width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
+  width: 100svw;
+  max-width: 100svw;
+  margin-left: calc(50% - 50svw);
+  margin-right: calc(50% - 50svw);
   overflow: hidden;
   .swiper-wrapper { transition-timing-function: linear !important; }
   .swiper-slide { width: auto !important; }
@@ -46,7 +46,6 @@ export default function ListingsCarousel() {
         breakpoints={{ 768: { spaceBetween: 20 }, 1024: { spaceBetween: 24 } }}
         style={{ padding: '8px 20px' }}
         onSwiper={(s) => { swiperRef.current = s; s.autoplay.start(); }}
-        onResize={(s) => { s.update(); s.params.autoplay.disableOnInteraction = false; s.autoplay.start(); }}
         onTouchStart={(s) => { s.params.autoplay.disableOnInteraction = false; s.autoplay.start(); }}
         onTouchEnd={(s) => { s.params.autoplay.disableOnInteraction = false; s.autoplay.start(); }}
         onClick={(s) => { s.params.autoplay.disableOnInteraction = false; s.autoplay.start(); }}

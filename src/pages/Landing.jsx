@@ -38,7 +38,7 @@ export default function Landing() {
 
   return (
     <div className="container">
-      <div className="stack">
+      <div className="stack" style={{ gap: 12 }}>
         <div>
           <Header className="title">What you’ve created is valuable. <Emphasis>Let the right buyer see its worth.</Emphasis></Header>
           <SubHeader className="subtitle">Buy and sell profitable bootstrapped micro-SaaS. Premium-Vetted listings, clear metrics, human review.</SubHeader>
@@ -47,8 +47,10 @@ export default function Landing() {
           <button className="button primary" onClick={() => navigate("/sell")}>I am selling</button>
           <button className="button secondary" onClick={() => navigate("/buy")}>I am buying</button>
         </Row>
-        <ListingsCarousel />
-        <TextCarousel />
+        <div style={{ display: 'grid', gap: 6 }}>
+          <ListingsCarousel />
+          <TextCarousel />
+        </div>
         <Note>Curated only • Transparent metrics • Human review</Note>
       </div>
     </div>
