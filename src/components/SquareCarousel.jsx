@@ -1,5 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Autoplay } from 'swiper/modules'
+import 'swiper/css'
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -7,32 +10,6 @@ const Wrapper = styled.div`
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
   overflow: hidden;
-`
-
-const Track = styled.div`
-  display: flex;
-  gap: 0;
-  will-change: transform;
-  animation: scroll 28s linear infinite;
-
-  @keyframes scroll {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-    transform: none;
-  }
-`
-
-const Strip = styled.div`
-  display: flex;
-  gap: 12px;
-  flex: 0 0 auto;
-
-  @media (min-width: 768px) { gap: 16px; }
-  @media (min-width: 1024px) { gap: 24px; }
 `
 
 const Square = styled.div`
@@ -48,22 +25,31 @@ const Square = styled.div`
 `
 
 export default function SquareCarousel() {
-  const items = Array.from({ length: 10 })
+  const items = Array.from({ length: 14 })
 
   return (
     <Wrapper aria-label="image carousel">
-      <Track>
-        <Strip>
-          {items.map((_, i) => (
-            <Square key={`a-${i}`} />
-          ))}
-        </Strip>
-        <Strip aria-hidden="true">
-          {items.map((_, i) => (
-            <Square key={`b-${i}`} />
-          ))}
-        </Strip>
-      </Track>
+      <Swiper
+        modules={[Autoplay]}
+        loop
+        speed={30000}
+        slidesPerView={'auto'}
+        spaceBetween={12}
+        allowTouchMove={false}
+        simulateTouch={false}
+        autoplay={{ delay: 0, disableOnInteraction: false, pauseOnMouseEnter: false }}
+        loopAdditionalSlides={20}
+        observer={true}
+        observeParents={true}
+        breakpoints={{ 768: { spaceBetween: 16 }, 1024: { spaceBetween: 24 } }}
+        style={{ padding: '0 0 0 0' }}
+      >
+        {items.map((_, i) => (
+          <SwiperSlide key={i} style={{ width: 'auto' }}>
+            <Square />
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </Wrapper>
   )
 }

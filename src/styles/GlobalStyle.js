@@ -22,6 +22,7 @@ export const GlobalStyle = createGlobalStyle`
     padding: 0;
     background: var(--background);
     color: var(--foreground);
+    overflow-x: hidden;
     font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
