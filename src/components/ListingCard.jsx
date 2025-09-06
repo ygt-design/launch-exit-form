@@ -85,17 +85,16 @@ const PreviewImg = styled.div`
 
 const Meta = styled.div`
   position: absolute;
-  top: 10px;
+  bottom: 4px;
   right: 6px;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 7px 10px;
-  border-radius: 10px;
+  gap: 4px;
+  padding: 5px 8px;
+  border-radius: 999px;
   background: rgba(0,0,0,0.5);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.35);
   backdrop-filter: blur(8px);
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1;
   color: #fff;
   white-space: nowrap;
@@ -103,7 +102,7 @@ const Meta = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   
-  svg { width: 16px; height: 16px; display: inline-block; }
+  svg { width: 14px; height: 14px; display: inline-block; }
 `
 
 
