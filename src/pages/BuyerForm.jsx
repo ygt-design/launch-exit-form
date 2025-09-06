@@ -59,6 +59,9 @@ const Card = styled.div.attrs({ className: "card" })`
 const ThemeScope = styled.div`
   /* Override primary locally to magenta */
   --primary: #FF00A8;
+  --primary-gradient: linear-gradient(90deg, #FF00A8 0%, #FF00A8 20%, #FF5BCD 100%);
+  --primary-shadow-strong: rgba(255, 91, 205, 0.35);
+  --primary-shadow-weak: rgba(255, 91, 205, 0.25);
 `;
 
 const Spinner = styled.span`
