@@ -20,7 +20,7 @@ export default function ListingsCarousel() {
     <Wrapper>
       <Marquee gradient={false} speed={40} pauseOnHover={false} direction="left" autoFill>
         {listings.map((l, i) => (
-          <div key={i} style={{ width: 'min(360px, 86vw)', marginRight: 16 }}>
+          <div key={i} style={{ width: 'min(360px, 94vw)', marginRight: 8 }}>
             <ListingCard {...l} ctaLabel="Message Founder" />
           </div>
         ))}

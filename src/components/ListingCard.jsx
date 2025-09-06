@@ -9,7 +9,7 @@ const Card = styled.article`
   border-radius: var(--radius);
   background: #111315;
   padding: 14px;
-  width: clamp(260px, 70vw, 360px);
+  width: clamp(280px, 90vw, 360px);
 `
 
 const Header = styled.div`
