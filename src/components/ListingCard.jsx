@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { resolveIconFromEmoji } from './icons.jsx'
 import { IconEye } from './icons.jsx'
+import { IconLock } from './icons.jsx'
 
 const Card = styled.article`
   border: 1px solid var(--border);
@@ -111,11 +112,11 @@ const LockWrap = styled.div`
   inset: 0;
   display: grid;
   place-items: center;
+  
+  svg { width: 28px; height: 28px; }
 `
 
-const LockIcon = () => (
-  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 10V8a5 5 0 1 1 10 0v2h1a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h1Zm2 0h6V8a3 3 0 1 0-6 0v2Z" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
-)
+const LockIcon = () => (<IconLock />)
 
 const Description = styled.p`
   color: var(--foreground);
