@@ -409,6 +409,9 @@ Please change the parent <Route path="${L}"> to <Route path="${L==="/"?"*":`${L}
 `,Wb=ee.div`
   /* Override primary locally to magenta */
   --primary: #FF00A8;
+  --primary-gradient: linear-gradient(90deg, #FF00A8 0%, #FF00A8 20%, #FF5BCD 100%);
+  --primary-shadow-strong: rgba(255, 91, 205, 0.35);
+  --primary-shadow-weak: rgba(255, 91, 205, 0.25);
 `,Fb=ee.span`
   position: absolute;
   width: 16px;
@@ -457,6 +460,8 @@ Please change the parent <Route path="${L}"> to <Route path="${L==="/"?"*":`${L}
     --accent: #ffffff;
     --primary: #FF4C00;
     --primary-gradient: linear-gradient(90deg, #FF4C00 0%, #FF4C00 20%, #FF7A00 100%);
+    --primary-shadow-strong: rgba(255, 122, 0, 0.35);
+    --primary-shadow-weak: rgba(255, 122, 0, 0.25);
     --radius: 10px;
     --container: 720px;
     --error: #ef4444;
@@ -510,8 +515,8 @@ Please change the parent <Route path="${L}"> to <Route path="${L==="/"?"*":`${L}
   .button { height: 44px; border: 1px solid var(--border); border-radius: var(--radius); background: #ffffff; color: #111111; padding: 0 16px; }
   .button.secondary { background: transparent; color: #ffffff; border-color: var(--border); }
   .button.primary { background: var(--primary-gradient); color: #ffffff; border-color: transparent; transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease; }
-  .button.primary:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(255, 122, 0, 0.35); filter: brightness(1.02); }
-  .button.primary:active { transform: translateY(0); box-shadow: 0 2px 8px rgba(255, 122, 0, 0.25); filter: brightness(0.98); }
+  .button.primary:hover { transform: translateY(-1px); box-shadow: 0 6px 16px var(--primary-shadow-strong); filter: brightness(1.02); }
+  .button.primary:active { transform: translateY(0); box-shadow: 0 2px 8px var(--primary-shadow-weak); filter: brightness(0.98); }
   .button:disabled { opacity: 0.6; cursor: not-allowed; }
 
   .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; padding: 0; }
