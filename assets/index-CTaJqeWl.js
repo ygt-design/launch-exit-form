@@ -134,7 +134,7 @@ Please change the parent <Route path="${L}"> to <Route path="${L==="/"?"*":`${L}
   border-radius: var(--radius);
   background: #111315;
   padding: 14px;
-  width: clamp(260px, 70vw, 360px);
+  width: clamp(280px, 90vw, 360px);
 `,J1=ee.div`
   display: flex;
   align-items: center;
@@ -252,7 +252,7 @@ Please change the parent <Route path="${L}"> to <Route path="${L==="/"?"*":`${L}
   overflow: hidden;
   touch-action: pan-y;
   -webkit-overflow-scrolling: touch;
-`;function pb(){const u=hb;return p.jsx(mb,{children:p.jsx(xp,{gradient:!1,speed:40,pauseOnHover:!1,direction:"left",autoFill:!0,children:u.map((r,s)=>p.jsx("div",{style:{width:"min(360px, 86vw)",marginRight:16},children:p.jsx(Tp,{...r,ctaLabel:"Message Founder"})},s))})})}const yb=ee.div`
+`;function pb(){const u=hb;return p.jsx(mb,{children:p.jsx(xp,{gradient:!1,speed:40,pauseOnHover:!1,direction:"left",autoFill:!0,children:u.map((r,s)=>p.jsx("div",{style:{width:"min(360px, 94vw)",marginRight:8},children:p.jsx(Tp,{...r,ctaLabel:"Message Founder"})},s))})})}const yb=ee.div`
   width: 100vw;
   max-width: 100vw;
   margin-left: calc(50% - 50vw);
