@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import sellerData from "../data/seller.json";
-import Modal, { LoadingRow } from "../components/Modal.jsx";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -18,10 +17,70 @@ const Section = styled.div`
 
 const Label = styled.label`
   font-size: 14px;
+  &.required::after {
+    content: " *";
+    color: var(--primary);
+  }
 `;
 
-const Select = styled.select.attrs({ className: "select" })``;
-const Input = styled.input.attrs({ className: "input" })``;
+const Select = styled.select.attrs({ className: "select" })`
+  &:focus-visible {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(255, 76, 0, 0.15);
+  }
+`;
+const Input = styled.input.attrs({ className: "input" })`
+  &:focus-visible {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(255, 76, 0, 0.15);
+  }
+`;
+
+const Title = styled.h1`
+  font-size: 24px;
+  margin: 0;
+  color: var(--primary);
+`;
+
+const Card = styled.div.attrs({ className: "card" })`
+  border-color: rgba(255, 76, 0, 0.35);
+  position: relative;
+  &:before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 8px;
+    background: var(--primary);
+    border-top-left-radius: var(--radius);
+    border-top-right-radius: var(--radius);
+  }
+`;
+
+const Spinner = styled.span`
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.6);
+  border-top-color: #ffffff;
+  animation: spin 700ms linear infinite;
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+`;
+
+const SubmitButton = styled.button.attrs({ className: "button primary" })`
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 220px;
+`;
+
+const LabelText = styled.span`
+  transition: opacity 160ms ease;
+`;
 
 const { stages, mrrBands, categories } = sellerData;
 
@@ -29,12 +88,39 @@ export default function SellerForm() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", startupName: "", productUrl: "", stage: "", mrr: "", category: "" });
   const [touched, setTouched] = useState({});
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalState, setModalState] = useState({ status: "idle", message: "" }); // idle | loading | success | error
+  const [modalState, setModalState] = useState({ status: "idle", message: "" }); 
+
+  const emailRef = useRef(null);
+  const startupNameRef = useRef(null);
+  const productUrlRef = useRef(null);
+  const stageRef = useRef(null);
+  const mrrRef = useRef(null);
+  const categoryRef = useRef(null);
+
+  // Load draft from localStorage
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("sellerFormDraft");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        setForm(prev => ({ ...prev, ...parsed }));
+      }
+    } catch { /* ignore unavailable localStorage */ }
+  }, []);
+
+  // Persist draft
+  useEffect(() => {
+    try {
+      localStorage.setItem("sellerFormDraft", JSON.stringify(form));
+    } catch { /* ignore unavailable localStorage */ }
+  }, [form]);
 
   function update(e) {
     const { name, value } = e.target;
     setForm(prev => ({ ...prev, [name]: value }));
+  }
+
+  function markTouched(name) {
     setTouched(prev => ({ ...prev, [name]: true }));
   }
 
@@ -43,10 +129,15 @@ export default function SellerForm() {
     const isValid = form.email && form.startupName && form.productUrl && form.stage && form.mrr && form.category;
     if (!isValid) {
       setTouched({ email: true, startupName: true, productUrl: true, stage: true, mrr: true, category: true });
+      if (!form.email && emailRef.current) emailRef.current.focus();
+      else if (!form.startupName && startupNameRef.current) startupNameRef.current.focus();
+      else if (!form.productUrl && productUrlRef.current) productUrlRef.current.focus();
+      else if (!form.stage && stageRef.current) stageRef.current.focus();
+      else if (!form.mrr && mrrRef.current) mrrRef.current.focus();
+      else if (!form.category && categoryRef.current) categoryRef.current.focus();
       return;
     }
     setModalState({ status: "loading", message: "Submitting your details" });
-    setModalOpen(true);
     const formspreeId = import.meta.env.VITE_FORMSPREE_SELLER_ID;
     if (!formspreeId) {
       setModalState({ status: "error", message: "Missing VITE_FORMSPREE_SELLER_ID in .env" });
@@ -77,6 +168,7 @@ export default function SellerForm() {
           throw new Error(msg);
         }
         setModalState({ status: "success", message: "Submission received. Redirecting…" });
+        try { localStorage.removeItem("sellerFormDraft"); } catch { /* ignore */ }
         setTimeout(() => navigate("/thanks?seller=1"), 600);
       })
       .catch((err) => {
@@ -89,72 +181,73 @@ export default function SellerForm() {
     <div className="container">
       <div className="stack">
         <div>
-          <h1 className="title" style={{ fontSize: 24, margin: 0 }}>Exit without hassle. Focus on what’s next.</h1>
+          <Title className="title">Exit without hassle. Focus on what’s next.</Title>
           <p className="subtitle" style={{ margin: "6px 0 0" }}>Join early. Earn a badge and priority visibility on launch day.</p>
         </div>
-        <div className="card">
+        <Card>
           <Form onSubmit={onSubmit} noValidate>
             <Section className="control">
-              <Label htmlFor="email">Working e‑mail</Label>
-              <Input id="email" name="email" type="email" placeholder="you@company.com" required aria-invalid={touched.email && !form.email ? "true" : undefined} value={form.email} onChange={update} />
+              <Label htmlFor="email" className="required">Working e‑mail</Label>
+              <Input id="email" ref={emailRef} name="email" type="email" inputMode="email" autoComplete="email" placeholder="you@company.com" required aria-invalid={touched.email && !form.email ? "true" : undefined} value={form.email} onChange={update} onBlur={(e) => markTouched(e.target.name)} />
               {touched.email && !form.email && <span className="error-text">Please enter your email.</span>}
             </Section>
             <Section className="control">
-              <Label htmlFor="startupName">Startup name</Label>
-              <Input id="startupName" name="startupName" type="text" placeholder="Acme Inc." required aria-invalid={touched.startupName && !form.startupName ? "true" : undefined} value={form.startupName} onChange={update} />
+              <Label htmlFor="startupName" className="required">Startup name</Label>
+              <Input id="startupName" ref={startupNameRef} name="startupName" type="text" autoComplete="organization" placeholder="Acme Inc." required aria-invalid={touched.startupName && !form.startupName ? "true" : undefined} value={form.startupName} onChange={update} onBlur={(e) => markTouched(e.target.name)} />
               {touched.startupName && !form.startupName && <span className="error-text">Startup name is required.</span>}
             </Section>
             <Section className="control">
-              <Label htmlFor="productUrl">Link to live product</Label>
-              <Input id="productUrl" name="productUrl" type="url" placeholder="https://…" required aria-invalid={touched.productUrl && !form.productUrl ? "true" : undefined} value={form.productUrl} onChange={update} />
+              <Label htmlFor="productUrl" className="required">Link to live product</Label>
+              <Input id="productUrl" ref={productUrlRef} name="productUrl" type="url" inputMode="url" autoComplete="url" spellCheck={false} placeholder="https://…" required aria-invalid={touched.productUrl && !form.productUrl ? "true" : undefined} value={form.productUrl} onChange={update} onBlur={(e) => markTouched(e.target.name)} />
+              <span className="subtitle" style={{ fontSize: 12 }}>Use your public product URL (start with https://)</span>
               {touched.productUrl && !form.productUrl && <span className="error-text">Product link is required.</span>}
             </Section>
             <Section className="control">
-              <Label htmlFor="stage">Current stage</Label>
-              <Select id="stage" name="stage" required aria-invalid={touched.stage && !form.stage ? "true" : undefined} value={form.stage} onChange={update}>
+              <Label htmlFor="stage" className="required">Current stage</Label>
+              <Select id="stage" ref={stageRef} name="stage" required aria-invalid={touched.stage && !form.stage ? "true" : undefined} value={form.stage} onChange={update} onBlur={(e) => markTouched(e.target.name)}>
                 <option value="" disabled>Select stage</option>
                 {stages.map(s => <option key={s} value={s}>{s}</option>)}
               </Select>
               {touched.stage && !form.stage && <span className="error-text">Please select a stage.</span>}
             </Section>
             <Section className="control">
-              <Label htmlFor="mrr">Monthly revenue (MRR)</Label>
-              <Select id="mrr" name="mrr" required aria-invalid={touched.mrr && !form.mrr ? "true" : undefined} value={form.mrr} onChange={update}>
+              <Label htmlFor="mrr" className="required">Monthly revenue (MRR)</Label>
+              <Select id="mrr" ref={mrrRef} name="mrr" required aria-invalid={touched.mrr && !form.mrr ? "true" : undefined} value={form.mrr} onChange={update} onBlur={(e) => markTouched(e.target.name)}>
                 <option value="" disabled>Select MRR</option>
                 {mrrBands.map(s => <option key={s} value={s}>{s}</option>)}
               </Select>
               {touched.mrr && !form.mrr && <span className="error-text">Please select MRR.</span>}
             </Section>
             <Section className="control">
-              <Label htmlFor="category">Category</Label>
-              <Select id="category" name="category" required aria-invalid={touched.category && !form.category ? "true" : undefined} value={form.category} onChange={update}>
+              <Label htmlFor="category" className="required">Category</Label>
+              <Select id="category" ref={categoryRef} name="category" required aria-invalid={touched.category && !form.category ? "true" : undefined} value={form.category} onChange={update} onBlur={(e) => markTouched(e.target.name)}>
                 <option value="" disabled>Select a category</option>
                 {categories.map(c => <option key={c} value={c}>{c}</option>)}
               </Select>
               {touched.category && !form.category && <span className="error-text">Please select a category.</span>}
             </Section>
             <div>
-              <button className="button" type="submit" disabled={!(form.email && form.startupName && form.productUrl && form.stage && form.mrr && form.category)}>Join as a Seller</button>
+              <SubmitButton
+                type="submit"
+                aria-busy={modalState.status === 'loading'}
+                disabled={modalState.status === 'loading' || !(form.email && form.startupName && form.productUrl && form.stage && form.mrr && form.category)}
+              >
+                {modalState.status === 'loading' && (
+                  <Spinner aria-hidden="true" />
+                )}
+                <LabelText style={{ opacity: modalState.status === 'loading' ? 0 : 1 }}>
+                  {modalState.status === 'success' ? 'Success! Redirecting…' : 'Join as a Seller'}
+                </LabelText>
+              </SubmitButton>
+              {modalState.status === 'error' && (
+                <div className="error-text" style={{ marginTop: 8 }}>{modalState.message}</div>
+              )}
+              <p className="subtitle" style={{ fontSize: 12, margin: "8px 0 0" }}>We’ll never share your email. ~30 seconds to complete.</p>
             </div>
           </Form>
-        </div>
+        </Card>
       </div>
     </div>
-    <Modal
-        open={modalOpen}
-        title={modalState.status === 'loading' ? 'Sending' : modalState.status === 'success' ? 'Success' : modalState.status === 'error' ? 'Error' : ''}
-        onClose={() => { if (modalState.status !== 'loading') setModalOpen(false); }}
-        footer={modalState.status === 'error' ? (
-          <>
-            <button className="button secondary" onClick={() => setModalOpen(false)}>Close</button>
-            <button className="button" onClick={onSubmit}>Retry</button>
-          </>
-        ) : null}
-      >
-        {modalState.status === 'loading' && <LoadingRow text="Submitting…" />}
-        {modalState.status === 'success' && <div>Thanks! We’re processing your submission.</div>}
-        {modalState.status === 'error' && <div className="error-text">{modalState.message}</div>}
-      </Modal>
     </>
   );
 }

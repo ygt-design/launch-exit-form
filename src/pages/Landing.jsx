@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import SquareCarousel from "../components/SquareCarousel.jsx";
+import ListingsCarousel from "../components/ListingsCarousel.jsx";
 import TextCarousel from "../components/TextCarousel.jsx";
 
 const Header = styled.h1`
@@ -47,7 +47,7 @@ export default function Landing() {
           <button className="button primary" onClick={() => navigate("/sell")}>I am selling</button>
           <button className="button secondary" onClick={() => navigate("/buy")}>I am buying</button>
         </Row>
-        <SquareCarousel />
+        <ListingsCarousel />
         <TextCarousel />
         <Note>Curated only • Transparent metrics • Human review</Note>
       </div>

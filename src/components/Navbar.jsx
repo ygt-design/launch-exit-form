@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 import logoUrl from '../assets/images/launch_exit_logo.svg'
 
 const Bar = styled.nav`
@@ -31,7 +32,9 @@ export default function Navbar() {
   return (
     <Bar>
       <Inner>
-        <Logo src={logoUrl} alt="LaunchExit" />
+        <Link to="/" aria-label="Go to homepage">
+          <Logo src={logoUrl} alt="LaunchExit" />
+        </Link>
       </Inner>
     </Bar>
   )

@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import styled from 'styled-components'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { Autoplay, FreeMode } from 'swiper/modules'
+import { Autoplay } from 'swiper/modules'
 import 'swiper/css'
 
 const Wrapper = styled.div`
@@ -12,6 +12,9 @@ const Wrapper = styled.div`
   overflow: hidden;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
+  
+  /* Ensure perfectly constant velocity */
+  .swiper-wrapper { transition-timing-function: linear !important; }
 `
 
 /* movement handled by Swiper */
@@ -45,23 +48,34 @@ const Dot = styled.span`
 `
 
 export default function TextCarousel() {
+  const swiperRef = useRef(null)
   const text = 'Exclusive Perks for Early Sellers & Buyers'
   const items = Array.from({ length: 14 })
 
   return (
     <Wrapper aria-label="text carousel">
       <Swiper
-        modules={[Autoplay, FreeMode]}
+        modules={[Autoplay]}
         loop
-        speed={32000}
+        speed={22000}
         slidesPerView={'auto'}
         spaceBetween={24}
-        freeMode={{ enabled: true, momentum: false }}
         allowTouchMove={false}
         simulateTouch={false}
-        autoplay={{ delay: 1, disableOnInteraction: false, pauseOnMouseEnter: false, reverseDirection: true }}
+        preventClicks={true}
+        preventClicksPropagation={true}
+        slideToClickedSlide={false}
+        noSwiping={true}
+        autoplay={{ delay: 0, disableOnInteraction: false, pauseOnMouseEnter: false, reverseDirection: true, stopOnLastSlide: false, waitForTransition: false }}
+        loopAdditionalSlides={50}
+        loopedSlides={14}
+        centeredSlides={false}
         breakpoints={{ 768: { spaceBetween: 32 }, 1024: { spaceBetween: 40 } }}
         style={{ padding: '0 0 0 0' }}
+        onSwiper={(s) => { swiperRef.current = s; s.autoplay.start(); }}
+        onTouchStart={(s) => { s.params.autoplay.disableOnInteraction = false; s.autoplay.start(); }}
+        onTouchEnd={(s) => { s.params.autoplay.disableOnInteraction = false; s.autoplay.start(); }}
+        onClick={(s) => { s.params.autoplay.disableOnInteraction = false; s.autoplay.start(); }}
       >
         {items.map((_, i) => (
           <SwiperSlide key={i} style={{ width: 'auto' }}>
