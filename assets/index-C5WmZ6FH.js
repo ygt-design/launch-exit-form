@@ -276,7 +276,7 @@ Please change the parent <Route path="${q}"> to <Route path="${q==="/"?"*":`${q}
   .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; padding: 0; }
 
   @media (max-width: 480px) { .container { padding: 32px 16px; } }
-`,ib="/launch-exit-form/assets/launch_exit_logo-Dy613ZvH.svg",cb=mt.nav`
+`,ib=""+new URL("launch_exit_logo-Dy613ZvH.svg",import.meta.url).href,cb=mt.nav`
   border-bottom: 1px solid var(--border);
   background: var(--background);
 `,rb=mt.div`
