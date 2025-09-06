@@ -33,7 +33,7 @@ const Island = styled.div`
   -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 6px 20px rgba(0,0,0,0.25);
   pointer-events: auto;
-  width: min(700px, 100% - 24px);
+  width: min(700px, 100% - 20px);
 `
 
 const Logo = styled.img`
