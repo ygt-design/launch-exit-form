@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useLayoutEffect } from 'react'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import Landing from './pages/Landing.jsx'
 import SellerForm from './pages/SellerForm.jsx'
@@ -10,7 +10,17 @@ import Navbar from './components/Navbar.jsx'
 export default function App() {
   const location = useLocation();
 
+  // Ensure browser doesn't restore scroll position automatically
   useEffect(() => {
+    if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
+      const previous = window.history.scrollRestoration;
+      window.history.scrollRestoration = 'manual';
+      return () => { window.history.scrollRestoration = previous; };
+    }
+  }, []);
+
+  // Scroll to top on every navigation (HashRouter friendly)
+  useLayoutEffect(() => {
     try { window.scrollTo({ top: 0, left: 0, behavior: 'auto' }); } catch { window.scrollTo(0, 0); }
   }, [location.key]);
 
