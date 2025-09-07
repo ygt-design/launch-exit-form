@@ -4,20 +4,30 @@ import { Link } from 'react-router-dom'
 import logoUrl from '../assets/images/launch_exit_logo.svg'
 
 const Bar = styled.nav`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: fixed;
   inset: 12px 0 auto 0;
   z-index: 1000;
   background: transparent;
   pointer-events: none;
+
 `
 
 const Inner = styled.div`
   width: 100%;
-  max-width: 100%;
+  max-width: var(--container);
+  text-align: center;
   margin: 0 auto;
+  padding: 0 12px;
   display: flex;
   align-items: center;
   justify-content: center;
+  
+  @media (max-width: 480px) {
+    padding: 0 16px;
+  }
 `
 
 const Island = styled.div`
@@ -25,7 +35,7 @@ const Island = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 20px 14px;
+  padding: 20px 20px;
   border: 1px solid var(--border);
   border-radius: 14px;
   background: rgba(17, 19, 21, 0.7);
@@ -33,7 +43,11 @@ const Island = styled.div`
   -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 6px 20px rgba(0,0,0,0.25);
   pointer-events: auto;
-  width: min(700px, 100% - 20px);
+  width: 100%;
+
+  @media (max-width: 480px) {
+    padding: 18px 16px;
+  }
 `
 
 const Logo = styled.img`

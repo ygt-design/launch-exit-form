@@ -116,7 +116,7 @@ const { buyerTypes, dealSizes, timelines, categories } = buyerData;
 
 export default function BuyerForm() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ email: "", buyerType: "", dealSize: "", timeline: "", categories: [] });
+  const [form, setForm] = useState({ email: "", buyerType: "", dealSize: "", timeline: "", categories: [], otherCategory: "" });
   const [touched, setTouched] = useState({});
   const [modalState, setModalState] = useState({ status: "idle", message: "" });
 
@@ -124,6 +124,7 @@ export default function BuyerForm() {
   const buyerTypeRef = useRef(null);
   const dealSizeRef = useRef(null);
   const timelineRef = useRef(null);
+  const otherCategoryRef = useRef(null);
 
   // Draft load
   useEffect(() => {
@@ -149,20 +150,23 @@ export default function BuyerForm() {
     setForm(prev => {
       const exists = prev.categories.includes(value);
       const next = exists ? prev.categories.filter(v => v !== value) : [...prev.categories, value];
-      return { ...prev, categories: next };
+      const clearedOther = value === 'Other' && exists ? { otherCategory: '' } : {};
+      return { ...prev, categories: next, ...clearedOther };
     });
     setTouched(prev => ({ ...prev, categories: true }));
   }
 
   function onSubmit(e) {
     e.preventDefault();
-    const isValid = form.email && form.buyerType && form.dealSize && form.timeline && form.categories.length > 0;
+    const includesOther = form.categories.includes('Other');
+    const isValid = form.email && form.buyerType && form.dealSize && form.timeline && form.categories.length > 0 && (!includesOther || !!form.otherCategory);
     if (!isValid) {
-      setTouched({ email: true, buyerType: true, dealSize: true, timeline: true, categories: true });
+      setTouched({ email: true, buyerType: true, dealSize: true, timeline: true, categories: true, ...(includesOther ? { otherCategory: true } : {}) });
       if (!form.email && emailRef.current) emailRef.current.focus();
       else if (!form.buyerType && buyerTypeRef.current) buyerTypeRef.current.focus();
       else if (!form.dealSize && dealSizeRef.current) dealSizeRef.current.focus();
       else if (!form.timeline && timelineRef.current) timelineRef.current.focus();
+      else if (includesOther && !form.otherCategory && otherCategoryRef.current) otherCategoryRef.current.focus();
       return;
     }
     setModalState({ status: "loading", message: "Submitting your details" });
@@ -177,7 +181,7 @@ export default function BuyerForm() {
     fd.append("buyerType", form.buyerType);
     fd.append("dealSize", form.dealSize);
     fd.append("timeline", form.timeline);
-    form.categories.forEach((c) => fd.append("categories[]", c));
+    form.categories.forEach((c) => fd.append("categories[]", c === 'Other' ? form.otherCategory : c));
     fd.append("_replyto", form.email);
     fd.append("_subject", "FormExit — Buyer waitlist");
     fetch(endpoint, { method: "POST", headers: { "Accept": "application/json" }, body: fd })
@@ -265,6 +269,13 @@ export default function BuyerForm() {
                 })}
               </div>
               {touched.categories && form.categories.length === 0 && <span className="error-text">Select at least one category.</span>}
+              {form.categories.includes('Other') && (
+                <div className="control" style={{ marginTop: 8 }}>
+                  <Label htmlFor="otherCategory" className="required">Other category</Label>
+                  <Input id="otherCategory" ref={otherCategoryRef} name="otherCategory" type="text" placeholder="Describe your category" required aria-invalid={touched.otherCategory && !form.otherCategory ? "true" : undefined} value={form.otherCategory} onChange={update} onBlur={(e) => markTouched(e.target.name)} />
+                  {touched.otherCategory && !form.otherCategory && <span className="error-text">Please enter your category.</span>}
+                </div>
+              )}
             </Section>
             <div>
               <SubmitButton

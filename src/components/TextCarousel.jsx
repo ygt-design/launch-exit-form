@@ -12,12 +12,7 @@ const Wrapper = styled.div`
   -webkit-overflow-scrolling: touch;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-  
-  /* Marquee handles motion */
 `
-
-/* movement handled by Swiper */
-
 const Strip = styled.div`
   display: flex;
   align-items: center;

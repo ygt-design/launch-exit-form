@@ -8,7 +8,7 @@ export const GlobalStyle = createGlobalStyle`
     --border: #27272a;
     --accent: #ffffff;
     --primary: #FF4C00;
-    --primary-gradient: linear-gradient(90deg, #FF4C00 0%, #FF4C00 20%, #FF7A00 100%);
+    --primary-gradient: linear-gradient(40deg,#ff4c00 0%, #FF7A00 100%);
     --primary-shadow-strong: rgba(255, 122, 0, 0.35);
     --primary-shadow-weak: rgba(255, 122, 0, 0.25);
     --radius: 10px;

@@ -5,8 +5,12 @@ import ListingsCarousel from "../components/ListingsCarousel.jsx";
 import TextCarousel from "../components/TextCarousel.jsx";
 
 const Header = styled.h1`
-  font-size: 35px;
+  font-size: 40px;
   margin: 0 0 18px;
+
+  @media (max-width: 480px) {
+    font-size: 35px;
+  }
 `;
 
 const SubHeader = styled.p`

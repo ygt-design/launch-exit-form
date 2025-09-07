@@ -86,7 +86,7 @@ const { stages, mrrBands, categories } = sellerData;
 
 export default function SellerForm() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ email: "", startupName: "", productUrl: "", stage: "", mrr: "", category: "" });
+  const [form, setForm] = useState({ email: "", startupName: "", productUrl: "", stage: "", mrr: "", category: "", otherCategory: "" });
   const [touched, setTouched] = useState({});
   const [modalState, setModalState] = useState({ status: "idle", message: "" }); 
 
@@ -96,6 +96,7 @@ export default function SellerForm() {
   const stageRef = useRef(null);
   const mrrRef = useRef(null);
   const categoryRef = useRef(null);
+  const otherCategoryRef = useRef(null);
 
   // Load draft from localStorage
   useEffect(() => {
@@ -117,7 +118,11 @@ export default function SellerForm() {
 
   function update(e) {
     const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
+    setForm(prev => ({
+      ...prev,
+      [name]: value,
+      ...(name === 'category' && value !== 'Other' ? { otherCategory: '' } : null),
+    }));
   }
 
   function markTouched(name) {
@@ -126,15 +131,17 @@ export default function SellerForm() {
 
   function onSubmit(e) {
     e.preventDefault();
-    const isValid = form.email && form.startupName && form.productUrl && form.stage && form.mrr && form.category;
+    const needsOther = form.category === 'Other';
+    const isValid = form.email && form.startupName && form.productUrl && form.stage && form.mrr && form.category && (!needsOther || !!form.otherCategory);
     if (!isValid) {
-      setTouched({ email: true, startupName: true, productUrl: true, stage: true, mrr: true, category: true });
+      setTouched({ email: true, startupName: true, productUrl: true, stage: true, mrr: true, category: true, ...(form.category === 'Other' ? { otherCategory: true } : {}) });
       if (!form.email && emailRef.current) emailRef.current.focus();
       else if (!form.startupName && startupNameRef.current) startupNameRef.current.focus();
       else if (!form.productUrl && productUrlRef.current) productUrlRef.current.focus();
       else if (!form.stage && stageRef.current) stageRef.current.focus();
       else if (!form.mrr && mrrRef.current) mrrRef.current.focus();
       else if (!form.category && categoryRef.current) categoryRef.current.focus();
+      else if (form.category === 'Other' && !form.otherCategory && otherCategoryRef.current) otherCategoryRef.current.focus();
       return;
     }
     setModalState({ status: "loading", message: "Submitting your details" });
@@ -150,7 +157,8 @@ export default function SellerForm() {
     fd.append("productUrl", form.productUrl);
     fd.append("stage", form.stage);
     fd.append("mrr", form.mrr);
-    fd.append("category", form.category);
+    const categoryToSend = form.category === 'Other' ? form.otherCategory : form.category;
+    fd.append("category", categoryToSend);
     fd.append("_replyto", form.email);
     fd.append("_subject", "FormExit — Seller waitlist");
     fetch(endpoint, { method: "POST", headers: { "Accept": "application/json" }, body: fd })
@@ -225,12 +233,19 @@ export default function SellerForm() {
                 {categories.map(c => <option key={c} value={c}>{c}</option>)}
               </Select>
               {touched.category && !form.category && <span className="error-text">Please select a category.</span>}
+              {form.category === 'Other' && (
+                <div className="control" style={{ marginTop: 8 }}>
+                  <Label htmlFor="otherCategory" className="required">Other category</Label>
+                  <Input id="otherCategory" ref={otherCategoryRef} name="otherCategory" type="text" placeholder="Describe your category" required aria-invalid={touched.otherCategory && !form.otherCategory ? "true" : undefined} value={form.otherCategory} onChange={update} onBlur={(e) => markTouched(e.target.name)} />
+                  {touched.otherCategory && !form.otherCategory && <span className="error-text">Please enter your category.</span>}
+                </div>
+              )}
             </Section>
             <div>
               <SubmitButton
                 type="submit"
                 aria-busy={modalState.status === 'loading'}
-                disabled={modalState.status === 'loading' || !(form.email && form.startupName && form.productUrl && form.stage && form.mrr && form.category)}
+                disabled={modalState.status === 'loading' || !(form.email && form.startupName && form.productUrl && form.stage && form.mrr && form.category && (form.category !== 'Other' ? true : !!form.otherCategory))}
               >
                 {modalState.status === 'loading' && (
                   <Spinner aria-hidden="true" />
