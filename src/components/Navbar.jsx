@@ -51,13 +51,14 @@ const Island = styled.div`
 `
 
 const Logo = styled.img`
-  height: 15px;
+  height: 12px;
   width: auto;
   display: block;
 
   @media (min-width: 480px) {
-    height: 20px;
+    height: 18px;
   }
+
 `
 
 const RightLink = styled.a`

@@ -12,6 +12,46 @@ const Wrapper = styled.div`
   overflow: hidden;
   touch-action: pan-y;
   -webkit-overflow-scrolling: touch;
+  position: relative;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: clamp(96px, 12vw, 480px);
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  &::before {
+    left: 0;
+    background: linear-gradient(
+      to right,
+      rgba(11,11,12, 1) 0%,
+      rgba(11,11,12, 0.85) 50%,
+      rgba(11,11,12, 0.0) 100%
+    );
+  }
+
+  &::after {
+    right: 0;
+    background: linear-gradient(
+      to left,
+      rgba(11,11,12, 1) 0%,
+      rgba(11,11,12, 0.85) 50%,
+      rgba(11,11,12, 0.0) 100%
+    );
+  }
+
+  @media (max-width: 480px) {
+    &::before,
+    &::after {
+      width: 0;
+      background: none;
+    }
+  }
 `
 
 export default function ListingsCarousel() {
