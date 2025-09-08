@@ -1,0 +1,128 @@
+[
+  {
+    "icon": "⚙️",
+    "title": "Marketing Insights",
+    "price": "$6.2k",
+    "badges": [{"label": "Verified Profit"}, {"label": "Hot Right Now", "variant": "hot"}],
+    "viewersText": "12 buyers discussing",
+    "description": "Smart SaaS tool for social media performance tracking with rapid growth.",
+    "techStack": ["PHP", "MySQL", "HTML", "CSS", "JavaScript"]
+  },
+  {
+    "icon": "💼",
+    "title": "Pipeline CRM",
+    "price": "$11.8k",
+    "badges": [{"label": "Verified Profit"}, {"label": "Over $5k+ ARR"}],
+    "viewersText": "1 buyer discussing",
+    "description": "Lightweight CRM with pipeline tracking and automated lead scoring.",
+    "techStack": ["React", "Next.js", "Tailwind CSS", "Node.js", "Express", "Supabase"]
+  },
+  {
+    "icon": "🪙",
+    "title": "Budget AI",
+    "price": "$450k",
+    "badges": [{"label": "Verified Profit"}, {"label": "Over $15k+ MRR"}],
+    "viewersText": "3 buyers discussing",
+    "description": "AI-powered budgeting with real-time expense tracking across accounts.",
+    "techStack": ["React", "Next.js", "Tailwind CSS", "Node.js", "Express", "Supabase"]
+  },
+  {
+    "icon": "📊",
+    "title": "Analytics Lite",
+    "price": "$9.9k",
+    "badges": [{"label": "Verified Profit"}],
+    "viewersText": "2 buyers discussing",
+    "description": "Embedded analytics and dashboards for small businesses.",
+    "techStack": ["Django", "PostgreSQL", "React", "Chart.js"]
+  },
+  {
+    "icon": "🛒",
+    "title": "Checkout Booster",
+    "price": "$24k",
+    "badges": [{"label": "Verified Profit"}, {"label": "Hot Right Now", "variant": "hot"}],
+    "viewersText": "5 buyers discussing",
+    "description": "Conversion tools for e-commerce checkout optimization.",
+    "techStack": ["Ruby on Rails", "Redis", "Stimulus", "PostgreSQL"]
+  },
+  {
+    "icon": "📮",
+    "title": "Email Warmup Pro",
+    "price": "$18.5k",
+    "badges": [{"label": "Verified Profit"}],
+    "viewersText": "4 buyers discussing",
+    "description": "Email deliverability and warmup automation for cold outreach teams.",
+    "techStack": ["Node.js", "MongoDB", "Vue", "Express"]
+  },
+  {
+    "icon": "🧠",
+    "title": "Docs Copilot",
+    "price": "$39k",
+    "badges": [{"label": "Over $2k+ MRR"}],
+    "viewersText": "2 buyers discussing",
+    "description": "AI knowledge base with semantic search and chat for internal docs.",
+    "techStack": ["Next.js", "Prisma", "PostgreSQL", "OpenAI"]
+  },
+  {
+    "icon": "🧾",
+    "title": "InvoiceFlow",
+    "price": "$12k",
+    "badges": [{"label": "Verified Profit"}],
+    "viewersText": "1 buyer discussing",
+    "description": "Simple invoicing and payment tracking for freelancers.",
+    "techStack": ["Laravel", "MySQL", "Alpine.js", "Tailwind CSS"]
+  },
+  {
+    "icon": "📦",
+    "title": "ShipTrack",
+    "price": "$22k",
+    "badges": [{"label": "Verified Profit"}],
+    "viewersText": "3 buyers discussing",
+    "description": "Logistics tracking and webhook notifications service.",
+    "techStack": ["Go", "PostgreSQL", "gRPC", "React"]
+  },
+  {
+    "icon": "🎟️",
+    "title": "Evently",
+    "price": "$15k",
+    "badges": [{"label": "Verified Profit"}],
+    "viewersText": "2 buyers discussing",
+    "description": "Ticketing and attendee engagement platform for meetups.",
+    "techStack": ["Rails", "PostgreSQL", "React", "Redis"]
+  },
+  {
+    "icon": "🧑‍💻",
+    "title": "DevStatus",
+    "price": "$20k",
+    "badges": [{"label": "Verified Profit"}],
+    "viewersText": "4 buyers discussing",
+    "description": "Status pages and incident communication for SaaS teams.",
+    "techStack": ["Next.js", "Edge Runtime", "Upstash", "Vercel KV"]
+  },
+  {
+    "icon": "🌐",
+    "title": "SEO Monitor",
+    "price": "$28k",
+    "badges": [{"label": "Verified Profit"}],
+    "viewersText": "3 buyers discussing",
+    "description": "Keyword tracking and competitor analysis tool.",
+    "techStack": ["Node.js", "PostgreSQL", "React", "Redis"]
+  },
+  {
+    "icon": "📈",
+    "title": "Growth Experiments",
+    "price": "$32k",
+    "badges": [{"label": "Over $1k+ MRR"}],
+    "viewersText": "3 buyers discussing",
+    "description": "A/B testing and feature flagging platform.",
+    "techStack": ["Django", "Celery", "Redis", "React"]
+  },
+  {
+    "icon": "🔒",
+    "title": "AuthKit",
+    "price": "$26k",
+    "badges": [{"label": "Verified Profit"}],
+    "viewersText": "2 buyers discussing",
+    "description": "Passwordless authentication and MFA as a service.",
+    "techStack": ["Rust", "PostgreSQL", "Next.js", "WebAuthn"]
+  }
+]
