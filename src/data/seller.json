@@ -1,6 +1,0 @@
-{
-  "stages": ["Idea", "MVP", "Beta", "Launched", "Revenue", "Profitable", "Growing"],
-  "mrrBands": ["<$1k", "$1k–$5k", "$5k–$20k", "$20k–$100k", "$100k+"],
-  "categories": ["SaaS", "AI", "Developer Tools", "Consumer", "Fintech", "E‑commerce", "Education", "Other"]
-}
-

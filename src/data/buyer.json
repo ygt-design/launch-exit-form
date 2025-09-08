@@ -1,7 +1,0 @@
-{
-  "buyerTypes": ["Individual", "Company", "Fund", "Other"],
-  "dealSizes": ["<$10k", "$10k–$50k", "$50k–$250k", "$250k–$1M", "$1M+"],
-  "timelines": ["Immediately", "1–3 months", "3–6 months", "6+ months"],
-  "categories": ["SaaS", "AI", "Developer Tools", "Consumer", "Fintech", "E‑commerce", "Education", "Other"]
-}
-
