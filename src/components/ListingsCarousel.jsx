@@ -30,7 +30,7 @@ const Wrapper = styled.div`
     background: linear-gradient(
       to right,
       rgba(11,11,12, 1) 0%,
-      rgba(11,11,12, 0.85) 50%,
+      rgba(11,11,12, 0.85) 35%,
       rgba(11,11,12, 0.0) 100%
     );
   }
@@ -40,7 +40,7 @@ const Wrapper = styled.div`
     background: linear-gradient(
       to left,
       rgba(11,11,12, 1) 0%,
-      rgba(11,11,12, 0.85) 50%,
+      rgba(11,11,12, 0.85) 35%,
       rgba(11,11,12, 0.0) 100%
     );
   }
