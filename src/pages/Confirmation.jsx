@@ -1,27 +1,224 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import styled, { keyframes } from "styled-components";
+import { IconCheck, IconStar, IconClock, IconTarget } from "../components/icons";
+
+const fadeInUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+const pulse = keyframes`
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+`;
+
+const bounce = keyframes`
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+`;
+
+const ConfirmationContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 32px;
+  animation: ${fadeInUp} 0.6s ease-out;
+`;
+
+const SuccessIcon = styled.div`
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--primary-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  animation: ${pulse} 2s ease-in-out infinite;
+  
+  svg {
+    width: 40px;
+    height: 40px;
+    color: white;
+  }
+`;
+
+const Title = styled.h1`
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+  
+  @media (max-width: 768px) {
+    font-size: 28px;
+  }
+`;
+
+const Subtitle = styled.p`
+  font-size: 18px;
+  color: var(--muted);
+  margin: 0;
+  max-width: 600px;
+  padding: 0 60px;
+  line-height: 1.5;
+  
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
+`;
+
+const NextStepsCard = styled.div`
+  background: #111315;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 35px 40px;
+  width: 100%;
+  max-width: 500px;
+  margin-top: 16px;
+`;
+
+const NextStepsTitle = styled.h3`
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  color: var(--foreground);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  justify-content: center;
+  
+  svg {
+    width: 20px;
+    height: 20px;
+    color: var(--primary);
+  }
+`;
+
+
+const CelebrationText = styled.div`
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  
+  svg {
+    width: 16px;
+    height: 16px;
+    animation: ${bounce} 1s ease-in-out;
+  }
+`;
 
 export default function Confirmation() {
-  const location = useLocation();
-  const isSeller = location.search.includes('seller=1');
-  const isBuyer = location.search.includes('buyer=1');
+  const [showCelebration, setShowCelebration] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowCelebration(true), 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
 
   return (
     <div className="container">
-      <div className="stack">
+      <ConfirmationContainer>
+        <SuccessIcon>
+          <IconCheck />
+        </SuccessIcon>
+        
         <div>
-          <h1 className="title" style={{ fontSize: 24, margin: 0 }}>You’re on the list</h1>
-          <p className="subtitle" style={{ margin: '6px 0 0' }}>
-            {isSeller ? 'We’ll reach out to help you find the right buyer.' :
-             isBuyer ? 'We’ll curate opportunities that match your criteria.' :
-             'Thanks for joining the waitlist.'}
+          <Title> Thank You For Your Input! </Title> <br />
+          <Subtitle>
+            Welcome to the founding circle — the first members shaping our platform. We value your input and would like to optimize it to your needs.
+          </Subtitle>
+        </div>
+
+        <NextStepsCard>
+          <NextStepsTitle>
+            <IconClock />
+            Schedule a quick chat
+          </NextStepsTitle>
+          <p style={{ color: 'var(--muted)', fontSize: '16px', lineHeight: '1.5', margin: '0 0 24px 0' }}>
+            We&apos;re interviewing early buyers and founders to refine the marketplace experience. Share your perspective in a quick call.
           </p>
-        </div>
-        <div role="group" aria-label="Next steps" style={{ display: 'flex', gap: 12 }}>
-          <Link to="/sell"><button className="button secondary">Seller form</button></Link>
-          <Link to="/buy"><button className="button">Buyer form</button></Link>
-        </div>
-      </div>
+          <a 
+            href="https://calendly.com/your-link" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              height: '48px',
+              padding: '0 24px',
+              background: 'var(--primary-gradient)',
+              color: 'white',
+              border: 'none',
+              borderRadius: 'var(--radius)',
+              fontWeight: '600',
+              textDecoration: 'none',
+              transition: 'all 0.2s ease',
+              minWidth: '200px'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.transform = 'translateY(-2px)';
+              e.target.style.boxShadow = '0 8px 20px var(--primary-shadow-strong)';
+              e.target.style.filter = 'brightness(1.05)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = 'translateY(0)';
+              e.target.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+              e.target.style.filter = 'brightness(1)';
+            }}
+          >
+            <IconTarget />
+            Book a quick chat now
+          </a>
+        </NextStepsCard>
+
+        {/* <ActionButtons>
+          <PrimaryButton to={isSeller ? "/buy" : "/sell"}>
+            <IconTarget />
+            {isSeller ? "Browse Buyers" : "List Your Startup"}
+          </PrimaryButton>
+          <SecondaryButton to="/">
+            <IconStar />
+            Back to Home
+          </SecondaryButton>
+        </ActionButtons> */}
+
+        {showCelebration && (
+          <CelebrationText>
+            <IconStar />
+            You&apos;re officially part of the future of startup exits!
+          </CelebrationText>
+        )}
+      </ConfirmationContainer>
     </div>
   );
 }

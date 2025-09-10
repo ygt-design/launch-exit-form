@@ -32,10 +32,21 @@ export const GlobalStyle = createGlobalStyle`
     text-rendering: optimizeLegibility;
   }
 
-  a { color: inherit; text-decoration: none; }
+  a { 
+    color: inherit; 
+    text-decoration: none; 
+    &:hover {
+      color: var(--primary);
+    }
+  }
 
-  button, input, select, textarea { font: inherit; color: inherit; }
-  button { cursor: pointer; }
+  button, input, select, textarea { 
+    font: inherit;
+    color: inherit; 
+  }
+  button { 
+    cursor: pointer; 
+  }
 
   .container {
     width: 100%;
@@ -58,7 +69,12 @@ export const GlobalStyle = createGlobalStyle`
   .input[aria-invalid="true"], .select[aria-invalid="true"], .checkbox[aria-invalid="true"] { border-color: var(--error); }
   .error-text { color: var(--error); font-size: 12px; margin-top: 4px; }
 
-  .checkbox-group { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 12px; }
+  .checkbox-group { 
+    display: grid; 
+    grid-template-columns: 
+    repeat(2, minmax(0, 1fr)); 
+    gap: 8px 12px; 
+  }
 
   .button { height: 44px; border: 1px solid var(--border); border-radius: var(--radius); background: #ffffff; color: #111111; padding: 0 16px; }
   .button.secondary { background: transparent; color: #ffffff; border-color: var(--border); }

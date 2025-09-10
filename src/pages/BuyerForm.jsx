@@ -7,7 +7,16 @@ import styled from "styled-components";
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
+  width: 100%;
+  
+  .control {
+    transition: all 0.2s ease;
+    
+    &:focus-within {
+      transform: translateY(-1px);
+    }
+  }
 `;
 
 const Section = styled.div`
@@ -25,14 +34,14 @@ const Select = styled.select.attrs({ className: "select" })`
   &:focus-visible {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(255, 0, 168, 0.15);
+    box-shadow: 0 0 0 3px rgba(0, 180, 216, 0.15);
   }
 `;
 const Input = styled.input.attrs({ className: "input" })`
   &:focus-visible {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(255, 0, 168, 0.15);
+    box-shadow: 0 0 0 3px rgba(0, 180, 216, 0.15);
   }
 `;
 
@@ -40,28 +49,34 @@ const Title = styled.h1`
   font-size: 24px;
   margin: 0;
   color: var(--primary);
-`;
-
-const Card = styled.div.attrs({ className: "card" })`
-  border-color: rgba(255, 0, 168, 0.35);
-  position: relative;
-  &:before {
-    content: "";
-    position: absolute;
-    inset: 0 0 auto 0;
-    height: 8px;
-    background: var(--primary);
-    border-top-left-radius: var(--radius);
-    border-top-right-radius: var(--radius);
+  
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 18px;
   }
 `;
 
+const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  max-width: 100%;
+  
+  @media (max-width: 768px) {
+    gap: 24px;
+  }
+`;
+
+
 const ThemeScope = styled.div`
-  /* Override primary locally to magenta */
-  --primary: #FF00A8;
-  --primary-gradient: linear-gradient(90deg, #FF00A8 0%, #FF00A8 20%, #FF5BCD 100%);
-  --primary-shadow-strong: rgba(255, 91, 205, 0.35);
-  --primary-shadow-weak: rgba(255, 91, 205, 0.25);
+  /* Override primary locally to a more subtle blue-green */
+  --primary: #00B4D8;
+  --primary-gradient: linear-gradient(135deg, #00B4D8 0%, #0077B6 100%);
+  --primary-shadow-strong: rgba(0, 180, 216, 0.25);
+  --primary-shadow-weak: rgba(0, 180, 216, 0.15);
 `;
 
 const Spinner = styled.span`
@@ -81,10 +96,32 @@ const SubmitButton = styled.button.attrs({ className: "button primary" })`
   align-items: center;
   justify-content: center;
   min-width: 220px;
+  width: 100%;
+  
+  @media (max-width: 480px) {
+    min-width: auto;
+  }
 `;
 
 const LabelText = styled.span`
   transition: opacity 160ms ease;
+`;
+
+const ProgressBar = styled.div`
+  width: 100%;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 8px;
+`;
+
+const ProgressFill = styled.div`
+  height: 100%;
+  background: var(--primary-gradient);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  width: ${props => props.progress}%;
 `;
 
 // Contemporary multi-select chip
@@ -102,12 +139,12 @@ const CategoryOption = styled.label`
   font-size: 14px;
   transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease, color 180ms ease;
   
-  &:hover { border-color: rgba(255, 0, 168, 0.35); }
-  &:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(255, 0, 168, 0.15); }
+  &:hover { border-color: rgba(0, 180, 216, 0.35); }
+  &:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 180, 216, 0.15); }
   
   &[data-checked="true"] {
-    border-color: rgba(255, 0, 168, 0.65);
-    background: #18101c;
+    border-color: rgba(0, 180, 216, 0.65);
+    background: #0a1a2e;
     color: #ffffff;
   }
 `;
@@ -119,6 +156,20 @@ export default function BuyerForm() {
   const [form, setForm] = useState({ email: "", buyerType: "", dealSize: "", timeline: "", categories: [], otherCategory: "" });
   const [touched, setTouched] = useState({});
   const [modalState, setModalState] = useState({ status: "idle", message: "" });
+
+  // Calculate form completion progress
+  const calculateProgress = () => {
+    const requiredFields = ['email', 'buyerType', 'dealSize', 'timeline'];
+    const filledFields = requiredFields.filter(field => form[field] && form[field].trim() !== '');
+    const categoriesFilled = form.categories.length > 0;
+    const otherCategoryNeeded = form.categories.includes('Other');
+    const otherCategoryFilled = !otherCategoryNeeded || (form.otherCategory && form.otherCategory.trim() !== '');
+    
+    const totalFields = requiredFields.length + 1 + (otherCategoryNeeded ? 1 : 0); // +1 for categories
+    const filledTotal = filledFields.length + (categoriesFilled ? 1 : 0) + (otherCategoryFilled ? 1 : 0);
+    
+    return Math.round((filledTotal / totalFields) * 100);
+  };
 
   const emailRef = useRef(null);
   const buyerTypeRef = useRef(null);
@@ -208,16 +259,17 @@ export default function BuyerForm() {
   }
 
   return (
-    <>
     <div className="container">
       <ThemeScope>
-      <div className="stack">
-        <div>
-          <Title className="title">Acquire proven SaaS, without any surprises.</Title>
-          <p className="subtitle" style={{ margin: "6px 0 0" }}>Unlock premium access to vetted micro-SaaS deals. Carefully reviewed listings with transparent, verified metrics.</p>
-        </div>
-        <Card>
+        <FormContainer>
+          <div>
+            <Title className="title">Acquire proven SaaS, without any surprises.</Title>
+            <p className="subtitle" style={{ margin: "6px 0 0" }}>Unlock premium access to vetted micro-SaaS deals. Carefully reviewed listings with transparent, verified metrics.</p>
+          </div>
           <Form onSubmit={onSubmit} noValidate>
+            <ProgressBar>
+              <ProgressFill progress={calculateProgress()} />
+            </ProgressBar>
             <Section className="control">
               <Label htmlFor="email" className="required">E‑mail</Label>
               <Input id="email" ref={emailRef} name="email" type="email" inputMode="email" autoComplete="email" placeholder="you@example.com" required aria-invalid={touched.email && !form.email ? "true" : undefined} value={form.email} onChange={update} onBlur={(e) => markTouched(e.target.name)} />
@@ -291,13 +343,12 @@ export default function BuyerForm() {
               {modalState.status === 'error' && (
                 <div className="error-text" style={{ marginTop: 8 }}>{modalState.message}</div>
               )}
+              <p className="subtitle" style={{ fontSize: 12, margin: "8px 0 0" }}>Your privacy matters to us. Takes about 30 seconds to complete.</p>
             </div>
           </Form>
-        </Card>
-      </div>
+        </FormContainer>
       </ThemeScope>
     </div>
-    </>
   );
 }
  

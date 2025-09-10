@@ -123,6 +123,124 @@ export const IconEye = () => (
   </svg>
 )
 
+export const IconUser = () => (
+  <svg {...common} stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+    <circle cx="12" cy="7" r="4"/>
+  </svg>
+)
+
+export const IconBuilding = () => (
+  <svg {...common} stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/>
+    <path d="M6 12H4a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>
+    <path d="M18 9h2a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2h-2"/>
+    <path d="M10 6h4"/>
+    <path d="M10 10h4"/>
+    <path d="M10 14h4"/>
+    <path d="M10 18h4"/>
+  </svg>
+)
+
+export const IconDollarSign = () => (
+  <svg {...common} stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="12" y1="1" x2="12" y2="23"/>
+    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+  </svg>
+)
+
+export const IconHandshake = () => (
+  <svg {...common} stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M11 12a2 2 0 1 0 4 0 2 2 0 0 0-4 0"/>
+    <path d="M21 12c.552 0 1-.448 1-1V8a2 2 0 0 0-2-2h-2.5"/>
+    <path d="M3 12c-.552 0-1-.448-1-1V8a2 2 0 0 1 2-2h2.5"/>
+    <path d="M18 12h2a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2.5"/>
+    <path d="M6 12H4a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h2.5"/>
+    <path d="M12 2a5 5 0 0 1 5 5v2a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5Z"/>
+  </svg>
+)
+
+export const IconTarget = () => (
+  <svg {...common} stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <circle cx="12" cy="12" r="6"/>
+    <circle cx="12" cy="12" r="2"/>
+  </svg>
+)
+
+export const IconClock = () => (
+  <svg {...common} stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <polyline points="12,6 12,12 16,14"/>
+  </svg>
+)
+
+export const IconCode = () => (
+  <svg {...common} stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="16,18 22,12 16,6"/>
+    <polyline points="8,6 2,12 8,18"/>
+  </svg>
+)
+
+export const IconUsers = () => (
+  <svg {...common} stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+    <circle cx="9" cy="7" r="4"/>
+    <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+  </svg>
+)
+
+export const IconGraduationCap = () => (
+  <svg {...common} stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+    <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+  </svg>
+)
+
+export const IconStar = () => (
+  <svg {...common} stroke="currentColor" strokeWidth="1.8" fill="currentColor" strokeLinecap="round" strokeLinejoin="round">
+    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+  </svg>
+)
+
+export const IconMessageCircle = () => (
+  <svg {...common} stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
+  </svg>
+)
+
+export const IconBarChart = () => (
+  <svg {...common} stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="12" y1="20" x2="12" y2="10"/>
+    <line x1="18" y1="20" x2="18" y2="4"/>
+    <line x1="6" y1="20" x2="6" y2="16"/>
+  </svg>
+)
+
+export const IconCheckSquare = () => (
+  <svg {...common} stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="9,11 12,14 22,4"/>
+    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+  </svg>
+)
+
+export const IconCheck = () => (
+  <svg {...common} stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="20,6 9,17 4,12"/>
+  </svg>
+)
+
+export const IconPalette = () => (
+  <svg {...common} stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="13.5" cy="6.5" r=".5"/>
+    <circle cx="17.5" cy="10.5" r=".5"/>
+    <circle cx="8.5" cy="7.5" r=".5"/>
+    <circle cx="6.5" cy="12.5" r=".5"/>
+    <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c4.86 0 8.773-3.94 8.773-8.773C19.523 6.5 15.86 2 12 2z"/>
+  </svg>
+)
+
 export const emojiIconMap = {
   '⚙️': <IconCog />,
   '💼': <IconBriefcase />,

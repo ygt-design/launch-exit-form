@@ -31,18 +31,18 @@ const Emphasis = styled.span`
 
 
 const HeaderSection = styled.div`
-  padding: 55px 0;
+  padding: 30px 0 70px 0;
   display: grid;
-  gap: 18px;
+  gap: 12px;
 
   @media (max-width: 480px) {
-    padding: 28px 6px;
+    padding: 20px 6px 40px 6px;
   }
 `;
 
 const Row = styled.div`
   display: flex;
-  gap: 12px;  
+  gap: 20px;  
   align-items: center;
   margin-bottom: 0;
 `;
@@ -54,6 +54,37 @@ const Note = styled.p`
   font-size: 14px;
 `;
 
+const BlinkingCircle = styled.div`
+  width: 6px;
+  height: 6px;
+  background: #22c55e;
+  border-radius: 50%;
+  animation: blink 1.5s ease-in-out infinite;
+  
+  @keyframes blink {
+    0%, 50% {
+      opacity: 1;
+    }
+    51%, 100% {
+      opacity: 0.3;
+    }
+  }
+`;
+
+const ComingSoonBadge = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 20px;
+  color: #22c55e;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 16px;
+`;
+
 const BackdropGlow = styled.div`
   position: absolute;
   left: 50%;
@@ -62,7 +93,7 @@ const BackdropGlow = styled.div`
   width: clamp(420px, 60vw, 960px);
   height: clamp(420px, 60vw, 960px);
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 76, 0, 0.5) 0%, rgba(255, 76, 0, 0.25) 45%, rgba(255, 76, 0, 0) 70%);
+  background: radial-gradient(circle, hsla(17.88235294117647, 100%, 50%, 0.5) 0%, rgba(255, 76, 0, 0.25) 45%, rgba(255, 76, 0, 0) 70%);
   filter: blur(80px);
   opacity: 0.45;
   pointer-events: none;
@@ -99,20 +130,28 @@ export default function Landing() {
       <div className="stack" style={{ gap: 12 }}>
         <BackdropGlow />
         <HeaderSection>
-          <div style={{ display: 'grid', gap: 12 }}>
-            <Header className="title" $visible={isLoaded}>What you’ve created is valuable. <Emphasis>Let the right buyer see its worth.</Emphasis></Header>
-            <SubHeader className="subtitle" $visible={isLoaded}>Buy and sell profitable bootstrapped micro-SaaS. Premium-Vetted listings, clear metrics, human review.</SubHeader>
+          <div style={{ display: 'flex', justifyContent: 'center'}}>
+            <ComingSoonBadge>
+              <BlinkingCircle />
+              Coming Soon
+            </ComingSoonBadge>
           </div>
-          <Row role="group" aria-label="Choose form">
-            <button className="button primary" onClick={() => navigate("/sell")}>I am selling</button>
-            <button className="button secondary" onClick={() => navigate("/buy")}>I am buying</button>
-          </Row>
+          <div style={{ display: 'grid', gap: 12 }}>
+            <Header className="title" $visible={isLoaded}>What you've created is valuable. <Emphasis>Let the right buyer see its worth.</Emphasis></Header>
+            <SubHeader className="subtitle" $visible={isLoaded}>Join the waitlist to be first in line. Early members get <Emphasis>Premium Membership</Emphasis> status with priority visibility when we launch.</SubHeader>
+          </div>
+          <div style={{ marginTop: '8px' }}>
+            <Row role="group" aria-label="Join waitlist">
+              <button className="button primary" onClick={() => navigate("/sell")}>Join as Seller</button>
+              <button className="button secondary" onClick={() => navigate("/buy")}>Join as Buyer</button>
+            </Row>
+          </div>
         </HeaderSection>
         <div style={{ display: 'grid', gap: 6 }}>
           <ListingsCarousel />
           {/* <TextCarousel /> */}
         </div>
-        <Note>Curated only • Transparent metrics • Human review</Note>
+        <Note>Early access • Premium Listing perk • Priority visibility on launch</Note>
       </div>
     </div>
   );
