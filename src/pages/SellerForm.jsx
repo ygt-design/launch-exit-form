@@ -45,6 +45,7 @@ const Textarea = styled.textarea.attrs({ className: "input" })`
   resize: vertical;
   font-family: inherit;
   padding: 12px;
+  font-size: 14px;
   
   &::placeholder {
     font-size: 12px;

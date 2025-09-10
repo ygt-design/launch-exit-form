@@ -138,7 +138,7 @@ export default function Landing() {
           </div>
           <div style={{ display: 'grid', gap: 12 }}>
             <Header className="title" $visible={isLoaded}>What you've created is valuable. <Emphasis>Let the right buyer see its worth.</Emphasis></Header>
-            <SubHeader className="subtitle" $visible={isLoaded}>Join the waitlist to be first in line. Early members get <Emphasis>Premium Membership</Emphasis> status with priority visibility when we launch.</SubHeader>
+            <SubHeader className="subtitle" $visible={isLoaded}>Join the waitlist to be first in line. Early sellers get <Emphasis>Premium Seller</Emphasis> status with priority visibility when we launch.</SubHeader>
           </div>
           <div style={{ marginTop: '8px' }}>
             <Row role="group" aria-label="Join waitlist">

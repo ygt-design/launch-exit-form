@@ -78,6 +78,10 @@ const Title = styled.h3`
   letter-spacing: -0.01em;
   font-size: clamp(16px, 2.6vw, 20px);
   color: ${props => props.isEmpty ? 'var(--muted)' : 'var(--foreground)'};
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  line-height: 1.3;
 `;
 
 const Price = styled.div`
@@ -262,7 +266,7 @@ export function SellerFormPreview({ formData }) {
           <Badges>
             <Badge className="premium">
               <IconStar />
-              Premium Listing
+              Premium Seller
             </Badge>
             {formData.stage && (
               <Badge>{formData.stage}</Badge>
@@ -290,7 +294,7 @@ export function SellerFormPreview({ formData }) {
                 <Tag>Active</Tag>
               </TagGrid>
             </Tech>
-            <CTA disabled>Complete the Form to Get Premium Listing</CTA>
+            <CTA disabled>Complete the Form to Get Premium Seller Status</CTA>
           </Footer>
       </PreviewCard>
     </PreviewContainer>
