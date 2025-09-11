@@ -138,12 +138,13 @@ export default function Landing() {
           </div>
           <div style={{ display: 'grid', gap: 12 }}>
             <Header className="title" $visible={isLoaded}>What you've created is valuable. <Emphasis>Let the right buyer see its worth.</Emphasis></Header>
-            <SubHeader className="subtitle" $visible={isLoaded}>Join the waitlist to be first in line. Early sellers get <Emphasis>Premium Seller</Emphasis> status with priority visibility when we launch.</SubHeader>
+            <SubHeader className="subtitle" $visible={isLoaded}> We’re building the only curated marketplace designed exclusively for bootstrapped SaaS startups. Founding sellers get 0% upfront fees, verified premium buyers, and fast, transparent exits — without brokers, lock-ins, or noise from non-SaaS listings.
+            <br/> <Emphasis>Join the waitlist to be first in line.</Emphasis> </SubHeader>
           </div>
           <div style={{ marginTop: '8px' }}>
             <Row role="group" aria-label="Join waitlist">
-              <button className="button primary" onClick={() => navigate("/sell")}>Join as Seller</button>
-              <button className="button secondary" onClick={() => navigate("/buy")}>Join as Buyer</button>
+              <button className="button primary" onClick={() => navigate("/sell")}>Join as a Founding Seller</button>
+              <button className="button secondary" onClick={() => navigate("/buy")}>Join as a Buyer</button>
             </Row>
           </div>
         </HeaderSection>
