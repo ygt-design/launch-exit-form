@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import buyerData from "../data/buyer.json";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-// Inline feedback, no modal
 
 const Form = styled.form`
   display: flex;
@@ -12,9 +11,23 @@ const Form = styled.form`
   
   .control {
     transition: all 0.2s ease;
+  }
+  
+  .checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 8px;
     
-    &:focus-within {
-      transform: translateY(-1px);
+    margin-top: 8px;
+    
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 6px;
+    }
+    
+    @media (max-width: 480px) {
+      grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+      gap: 4px;
     }
   }
 `;
@@ -27,44 +40,72 @@ const Section = styled.div`
 
 const Label = styled.label`
   font-size: 14px;
-  &.required::after { content: " *"; color: var(--primary); }
+  font-weight: 500;
+  
+  &.required::after { 
+    content: " *"; 
+    color: var(--primary); 
+  }
 `;
 
-const Select = styled.select.attrs({ className: "select" })`
-  &:focus-visible {
+const Input = styled.input.attrs({ className: "input" })`
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  
+  &:focus {
     outline: none;
     border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(0, 180, 216, 0.15);
   }
+  
+  &::placeholder {
+    color: var(--muted);
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
 `;
-const Input = styled.input.attrs({ className: "input" })`
-  &:focus-visible {
+
+const Select = styled.select.attrs({ className: "select" })`
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  
+  &:focus {
     outline: none;
     border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(0, 180, 216, 0.15);
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 16px; /* Prevents zoom on iOS */
   }
 `;
 
 const Title = styled.h1`
-  font-size: 32px;
-  line-height: 1.2;
-  padding: 16px 0;
+  font-size: 24px;
   margin: 0;
-  color: #ffffff;
+  color: var(--primary);
   
   @media (max-width: 768px) {
-    font-size: 24px;
-    padding: 12px 0;
+    font-size: 20px;
   }
   
   @media (max-width: 480px) {
-    font-size: 20px;
-    padding: 10px 0;
+    font-size: 18px;
   }
-`;
-
-const TitleBlue = styled.span`
-  color: var(--primary);
 `;
 
 const FormContainer = styled.div`
@@ -78,41 +119,12 @@ const FormContainer = styled.div`
   }
 `;
 
-
 const ThemeScope = styled.div`
   /* Override primary locally to a more subtle blue-green */
   --primary: #00B4D8;
   --primary-gradient: linear-gradient(135deg, #00B4D8 0%, #0077B6 100%);
   --primary-shadow-strong: rgba(0, 180, 216, 0.25);
   --primary-shadow-weak: rgba(0, 180, 216, 0.15);
-`;
-
-const Spinner = styled.span`
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.6);
-  border-top-color: #ffffff;
-  animation: spin 700ms linear infinite;
-  @keyframes spin { to { transform: rotate(360deg); } }
-`;
-
-const SubmitButton = styled.button.attrs({ className: "button primary" })`
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 220px;
-  width: 100%;
-  
-  @media (max-width: 480px) {
-    min-width: auto;
-  }
-`;
-
-const LabelText = styled.span`
-  transition: opacity 160ms ease;
 `;
 
 const ProgressBar = styled.div`
@@ -132,29 +144,36 @@ const ProgressFill = styled.div`
   width: ${props => props.progress}%;
 `;
 
-// Contemporary multi-select chip
 const CategoryOption = styled.label`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 12px;
+  padding: 12px 16px;
   border: 1px solid var(--border);
-  border-radius: 10px;
-  background: #111315;
+  border-radius: 8px;
+  background: var(--background);
   cursor: pointer;
   user-select: none;
   color: var(--foreground);
   font-size: 14px;
   text-align: center;
-  transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease, color 180ms ease;
+  transition: all 0.2s ease;
+  min-height: 48px;
+  word-break: break-word;
   
-  &:hover { border-color: rgba(0, 180, 216, 0.35); }
-  &:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 180, 216, 0.15); }
+  &:hover { 
+    border-color: rgba(0, 180, 216, 0.35); 
+  }
+  
+  &:focus-within { 
+    border-color: var(--primary); 
+    box-shadow: 0 0 0 3px rgba(0, 180, 216, 0.15); 
+  }
   
   &[data-checked="true"] {
-    border-color: rgba(0, 180, 216, 0.65);
-    background: #0a1a2e;
-    color: #ffffff;
+    border-color: var(--primary);
+    background: rgba(0, 180, 216, 0.1);
+    color: var(--primary);
   }
 
   input {
@@ -166,335 +185,394 @@ const CategoryOption = styled.label`
   }
 
   @media (max-width: 768px) {
-    text-align: center;
-    justify-content: center;
+    padding: 10px 12px;
+    font-size: 13px;
+    min-height: 44px;
   }
-`;
-
-const Description = styled.p`
-  margin: 6px 0 0;
-`;
-
-const OptionalNote = styled.span`
-  opacity: 0.6;
+  
+  @media (max-width: 480px) {
+    padding: 8px 10px;
+    font-size: 12px;
+    min-height: 40px;
+  }
 `;
 
 const ConsentRow = styled.label`
   display: flex;
-  gap: 8px;
+  gap: 12px;
   align-items: flex-start;
+  cursor: pointer;
+  line-height: 1.5;
+  font-size: 14px;
+  
+  input[type="checkbox"] {
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 8px;
+    font-size: 13px;
+  }
 `;
 
-const ConsentSection = styled(Section)`
-  margin-top: 4px;
+const SubmitButton = styled.button.attrs({ className: "button primary" })`
+  width: 100%;
+  padding: 16px 24px;
+  border: none;
+  border-radius: 8px;
+  background: var(--primary-gradient);
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 180, 216, 0.3);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 14px 20px;
+    font-size: 15px;
+  }
 `;
 
-const ExtraField = styled.div`
-  margin-top: 8px;
+const Spinner = styled.div`
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 `;
 
-const ErrorBelow = styled.div`
-  margin-top: 8px;
-`;
-
-const SmallNote = styled.p`
+const ErrorText = styled.span`
+  color: #ef4444;
   font-size: 12px;
-  margin: 8px 0 0;
+  margin-top: 4px;
+  display: block;
 `;
 
-const { buyerTypes, dealSizes, geographies, mrrRanges, categories } = buyerData;
+const OptionalNote = styled.span`
+  opacity: 0.7;
+  font-weight: normal;
+`;
+
+const { buyerTypes, dealSizes, geographies, mrrRanges, categories, timelines } = buyerData;
 
 export default function BuyerForm() {
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    fullName: "",
     email: "",
-    linkedInUrl: "",
-    buyerType: "", // Role
-    company: "", // optional
-    geography: "",
+    buyerType: "",
     dealSize: "",
-    mrrRange: "",
+    timeline: "",
     categories: [],
     otherCategory: "",
-    consentDigest: false,
-    // keep for backwards compatibility, though not collected explicitly
-    timeline: ""
   });
   const [touched, setTouched] = useState({});
   const [modalState, setModalState] = useState({ status: "idle", message: "" });
 
   // Calculate form completion progress
   const calculateProgress = () => {
-    const requiredFields = ['fullName', 'email', 'linkedInUrl', 'buyerType', 'geography', 'dealSize', 'mrrRange'];
-    const filledFields = requiredFields.filter(field => {
-      const value = form[field];
-      if (typeof value === 'string') return value.trim() !== '';
-      return !!value;
-    });
-    const otherSelected = form.categories.some(c => c.toLowerCase().startsWith('other'));
+    const requiredFields = ['email', 'buyerType', 'dealSize', 'timeline'];
+    const filledFields = requiredFields.filter(field => form[field] && form[field].trim() !== '');
     const categoriesFilled = form.categories.length > 0;
+    const otherSelected = form.categories.includes('Other');
     const otherCategoryFilled = !otherSelected || (form.otherCategory && form.otherCategory.trim() !== '');
 
-    const totalFields = requiredFields.length + 1 + (otherSelected ? 1 : 0); // +1 for categories
+    const totalFields = requiredFields.length + 1 + (otherSelected ? 1 : 0);
     const filledTotal = filledFields.length + (categoriesFilled ? 1 : 0) + (otherCategoryFilled ? 1 : 0);
 
     return Math.round((filledTotal / totalFields) * 100);
   };
 
-  const fullNameRef = useRef(null);
-  const emailRef = useRef(null);
-  const linkedInRef = useRef(null);
-  const buyerTypeRef = useRef(null);
-  const dealSizeRef = useRef(null);
-  const geographyRef = useRef(null);
-  const mrrRangeRef = useRef(null);
-  const otherCategoryRef = useRef(null);
-
-  // Draft load
+  // Load draft from localStorage
   useEffect(() => {
     try {
       const saved = localStorage.getItem("buyerFormDraft");
-      if (saved) setForm(prev => ({ ...prev, ...JSON.parse(saved) }));
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        setForm(prev => ({ ...prev, ...parsed }));
+      }
     } catch { /* ignore */ }
   }, []);
 
-  // Draft persist
+  // Persist draft
   useEffect(() => {
-    try { localStorage.setItem("buyerFormDraft", JSON.stringify(form)); } catch { /* ignore */ }
+    try {
+      localStorage.setItem("buyerFormDraft", JSON.stringify(form));
+    } catch { /* ignore */ }
   }, [form]);
 
-  function update(e) {
+  const update = (e) => {
     const { name, value } = e.target;
     setForm(prev => ({ ...prev, [name]: value }));
-  }
+    setTouched(prev => ({ ...prev, [name]: true }));
+  };
 
-  function markTouched(name) { setTouched(prev => ({ ...prev, [name]: true })); }
+  const markTouched = (name) => {
+    setTouched(prev => ({ ...prev, [name]: true }));
+  };
 
-  function toggleCategory(value) {
+  const toggleCategory = (value) => {
     setForm(prev => {
       const exists = prev.categories.includes(value);
       const next = exists ? prev.categories.filter(v => v !== value) : [...prev.categories, value];
-      const isOther = value.toLowerCase().startsWith('other');
-      const clearedOther = isOther && exists ? { otherCategory: '' } : {};
+      const clearedOther = value === 'Other' && exists ? { otherCategory: '' } : {};
       return { ...prev, categories: next, ...clearedOther };
     });
     setTouched(prev => ({ ...prev, categories: true }));
-  }
+  };
 
-  function onSubmit(e) {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    const includesOther = form.categories.some(c => c.toLowerCase().startsWith('other'));
-    const isValid = (
-      form.fullName &&
-      form.email &&
-      form.linkedInUrl &&
-      form.buyerType &&
-      form.geography &&
-      form.dealSize &&
-      form.mrrRange &&
-      form.categories.length > 0 &&
-      (!includesOther || !!form.otherCategory)
-    );
-    if (!isValid) {
-      setTouched({
-        fullName: true,
-        email: true,
-        linkedInUrl: true,
-        buyerType: true,
-        geography: true,
-        dealSize: true,
-        mrrRange: true,
-        categories: true,
-        ...(includesOther ? { otherCategory: true } : {})
-      });
-      if (!form.fullName && fullNameRef.current) fullNameRef.current.focus();
-      else if (!form.email && emailRef.current) emailRef.current.focus();
-      else if (!form.linkedInUrl && linkedInRef.current) linkedInRef.current.focus();
-      else if (!form.buyerType && buyerTypeRef.current) buyerTypeRef.current.focus();
-      else if (!form.geography && geographyRef.current) geographyRef.current.focus();
-      else if (!form.dealSize && dealSizeRef.current) dealSizeRef.current.focus();
-      else if (!form.mrrRange && mrrRangeRef.current) mrrRangeRef.current.focus();
-      else if (includesOther && !form.otherCategory && otherCategoryRef.current) otherCategoryRef.current.focus();
+    
+    // Validate required fields
+    const requiredFields = ['email', 'buyerType', 'dealSize', 'timeline'];
+    const missingFields = requiredFields.filter(field => !form[field] || form[field].trim() === '');
+    
+    if (missingFields.length > 0) {
+      const fieldMap = {};
+      missingFields.forEach(field => { fieldMap[field] = true; });
+      setTouched(prev => ({ ...prev, ...fieldMap }));
       return;
     }
+    
+    if (form.categories.length === 0) {
+      setTouched(prev => ({ ...prev, categories: true }));
+      return;
+    }
+    
+    if (form.categories.includes('Other') && (!form.otherCategory || form.otherCategory.trim() === '')) {
+      setTouched(prev => ({ ...prev, otherCategory: true }));
+      return;
+    }
+
     setModalState({ status: "loading", message: "Submitting your details" });
+    
     const formspreeId = import.meta.env.VITE_FORMSPREE_BUYER_ID;
     if (!formspreeId) {
       setModalState({ status: "error", message: "Missing VITE_FORMSPREE_BUYER_ID in .env" });
       return;
     }
+
     const endpoint = `https://formspree.io/f/${formspreeId}`;
-    const fd = new FormData();
-    // Required + compatibility fields
-    fd.append("fullName", form.fullName);
-    fd.append("email", form.email);
-    fd.append("linkedInUrl", form.linkedInUrl);
-    fd.append("buyerType", form.buyerType); // Role
-    fd.append("company", form.company || "");
-    fd.append("geography", form.geography);
-    fd.append("dealSize", form.dealSize); // Check Size Range (USD)
-    fd.append("mrrRange", form.mrrRange);
-    // Keep timeline for backwards compatibility even if empty
-    fd.append("timeline", form.timeline || "");
-    const otherIs = (c) => c.toLowerCase().startsWith('other');
-    form.categories.forEach((c) => fd.append("categories[]", otherIs(c) ? (form.otherCategory || c) : c));
-    fd.append("consentDealsDigest", form.consentDigest ? "yes" : "no");
-    fd.append("_replyto", form.email);
-    fd.append("_subject", "FormExit — Buyer waitlist");
-    fetch(endpoint, { method: "POST", headers: { "Accept": "application/json" }, body: fd })
-      .then(async (r) => {
-        if (!r.ok) {
-          let msg = "Request failed";
-          const ct = r.headers.get("content-type") || "";
-          if (ct.includes("application/json")) {
-            const data = await r.json();
-            msg = (data.errors && data.errors.map(e => e.message).join(", ")) || data.error || msg;
-          } else {
-            const text = await r.text();
-            msg = text || msg;
-          }
-          throw new Error(msg);
-        }
-        setModalState({ status: "success", message: "Submission received. Redirecting…" });
-        try { localStorage.removeItem("buyerFormDraft"); } catch { /* ignore */ }
-        setTimeout(() => navigate("/thanks?buyer=1"), 600);
-      })
-      .catch((err) => {
-        setModalState({ status: "error", message: err?.message || "Something went wrong. Please try again." });
+    const formData = new FormData();
+    
+    // Add all form fields
+    Object.keys(form).forEach(key => {
+      if (key === 'categories') {
+        form.categories.forEach(category => formData.append('categories[]', category));
+      } else if (form[key]) {
+        formData.append(key, form[key]);
+      }
+    });
+    
+    formData.append("_replyto", form.email);
+    formData.append("_subject", "FormExit — Buyer Verification");
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Accept": "application/json" },
+        body: formData
       });
-  }
+
+      if (!response.ok) {
+        throw new Error("Submission failed");
+      }
+
+      setModalState({ status: "success", message: "Success! Redirecting..." });
+      
+      // Clear draft
+      try {
+        localStorage.removeItem("buyerFormDraft");
+      } catch { /* ignore */ }
+      
+      setTimeout(() => navigate("/thanks?buyer=1"), 1000);
+      
+    } catch (error) {
+      setModalState({ status: "error", message: error.message || "Something went wrong. Please try again." });
+    }
+  };
+
+  const isFormValid = () => {
+    const requiredFields = ['email', 'buyerType', 'dealSize', 'timeline'];
+    const basicValid = requiredFields.every(field => form[field] && form[field].trim() !== '');
+    const categoriesValid = form.categories.length > 0;
+    const otherValid = !form.categories.includes('Other') || (form.otherCategory && form.otherCategory.trim() !== '');
+    
+    return basicValid && categoriesValid && otherValid;
+  };
 
   return (
     <div className="container">
       <ThemeScope>
         <FormContainer>
           <div>
-            <Title className="title"><TitleBlue>Get your buyer status verified</TitleBlue> — access curated SaaS listings tailored to your acquisition criteria.</Title>
-            <Description className="subtitle">Founders value qualified, credible buyers. Verifying your buyer status shows sellers you're credible, helps us filter listings to fit your buy box, and ensures the opportunities you see are highly relevant.</Description>
+            <Title className="title">Acquire proven SaaS, without any surprises.</Title>
+            <p className="subtitle" style={{ margin: "6px 0 0" }}>Unlock premium access to vetted micro-SaaS deals. Carefully reviewed listings with transparent, verified metrics.</p>
           </div>
+          
           <Form onSubmit={onSubmit} noValidate>
             <ProgressBar>
               <ProgressFill progress={calculateProgress()} />
             </ProgressBar>
+            
             <Section className="control">
-              <Label htmlFor="fullName" className="required">Full Name</Label>
-              <Input id="fullName" ref={fullNameRef} name="fullName" type="text" autoComplete="name" placeholder="Alex Carter" required aria-invalid={touched.fullName && !form.fullName ? "true" : undefined} value={form.fullName} onChange={update} onBlur={(e) => markTouched(e.target.name)} />
-              {touched.fullName && !form.fullName && <span className="error-text">Please enter your full name.</span>}
-            </Section>
-            <Section className="control">
-              <Label htmlFor="email" className="required">Email Address</Label>
-              <Input id="email" ref={emailRef} name="email" type="email" inputMode="email" autoComplete="email" placeholder="you@example.com" required aria-invalid={touched.email && !form.email ? "true" : undefined} value={form.email} onChange={update} onBlur={(e) => markTouched(e.target.name)} />
+              <Label htmlFor="email" className="required">E‑mail</Label>
+              <Input 
+                id="email" 
+                name="email" 
+                type="email" 
+                autoComplete="email" 
+                placeholder="you@example.com" 
+                required 
+                value={form.email} 
+                onChange={update} 
+                onBlur={() => markTouched('email')}
+              />
               {touched.email && !form.email && <span className="error-text">Please enter your email.</span>}
             </Section>
+            
             <Section className="control">
-              <Label htmlFor="linkedInUrl" className="required">LinkedIn Profile</Label>
-              <Input id="linkedInUrl" ref={linkedInRef} name="linkedInUrl" type="url" inputMode="url" placeholder="https://www.linkedin.com/in/username" required aria-invalid={touched.linkedInUrl && !form.linkedInUrl ? "true" : undefined} value={form.linkedInUrl} onChange={update} onBlur={(e) => markTouched(e.target.name)} />
-              {touched.linkedInUrl && !form.linkedInUrl && <span className="error-text">Please add your LinkedIn URL.</span>}
-            </Section>
-            <Section className="control">
-              <Label htmlFor="buyerType" className="required">Role</Label>
-              <Select id="buyerType" ref={buyerTypeRef} name="buyerType" required aria-invalid={touched.buyerType && !form.buyerType ? "true" : undefined} value={form.buyerType} onChange={update} onBlur={(e) => markTouched(e.target.name)}>
-                <option value="" disabled>Select role</option>
-                {buyerTypes.map(s => <option key={s} value={s}>{s}</option>)}
+              <Label htmlFor="buyerType" className="required">Buyer type</Label>
+              <Select 
+                id="buyerType" 
+                name="buyerType" 
+                required 
+                value={form.buyerType} 
+                onChange={update} 
+                onBlur={() => markTouched('buyerType')}
+              >
+                <option value="" disabled>Select type</option>
+                {buyerTypes.map(type => (
+                  <option key={type} value={type}>{type}</option>
+                ))}
               </Select>
-              {touched.buyerType && !form.buyerType && <span className="error-text">Please select a role.</span>}
+              {touched.buyerType && !form.buyerType && <span className="error-text">Please select a buyer type.</span>}
             </Section>
+            
             <Section className="control">
-              <Label htmlFor="company">Firm / Company <OptionalNote>(optional)</OptionalNote></Label>
-              <Input id="company" name="company" type="text" placeholder="Company or fund name" value={form.company} onChange={update} onBlur={(e) => markTouched(e.target.name)} />
-            </Section>
-            <Section className="control">
-              <Label htmlFor="geography" className="required">Geography / Time Zone</Label>
-              <Select id="geography" ref={geographyRef} name="geography" required aria-invalid={touched.geography && !form.geography ? "true" : undefined} value={form.geography} onChange={update} onBlur={(e) => markTouched(e.target.name)}>
-                <option value="" disabled>Select region</option>
-                {geographies.map(r => <option key={r} value={r}>{r}</option>)}
+              <Label htmlFor="dealSize" className="required">Target deal size</Label>
+              <Select 
+                id="dealSize" 
+                name="dealSize" 
+                required 
+                value={form.dealSize} 
+                onChange={update} 
+                onBlur={() => markTouched('dealSize')}
+              >
+                <option value="" disabled>Select size</option>
+                {dealSizes.map(size => (
+                  <option key={size} value={size}>{size}</option>
+                ))}
               </Select>
-              {touched.geography && !form.geography && <span className="error-text">Please select a region.</span>}
+              {touched.dealSize && !form.dealSize && <span className="error-text">Please select a target deal size.</span>}
             </Section>
+            
             <Section className="control">
-              <Label htmlFor="dealSize" className="required">Check Size Range (USD)</Label>
-              <Select id="dealSize" ref={dealSizeRef} name="dealSize" required aria-invalid={touched.dealSize && !form.dealSize ? "true" : undefined} value={form.dealSize} onChange={update} onBlur={(e) => markTouched(e.target.name)}>
-                <option value="" disabled>Select range</option>
-                {dealSizes.map(s => <option key={s} value={s}>{s}</option>)}
+              <Label htmlFor="timeline" className="required">Acquisition timeline</Label>
+              <Select 
+                id="timeline" 
+                name="timeline" 
+                required 
+                value={form.timeline} 
+                onChange={update} 
+                onBlur={() => markTouched('timeline')}
+              >
+                <option value="" disabled>Select timeline</option>
+                {timelines?.map(timeline => (
+                  <option key={timeline} value={timeline}>{timeline}</option>
+                ))}
               </Select>
-              {touched.dealSize && !form.dealSize && <span className="error-text">Please select a check size.</span>}
+              {touched.timeline && !form.timeline && <span className="error-text">Please select a timeline.</span>}
             </Section>
+            
             <Section className="control">
-              <Label htmlFor="mrrRange" className="required">Preferred MRR Range</Label>
-              <Select id="mrrRange" ref={mrrRangeRef} name="mrrRange" required aria-invalid={touched.mrrRange && !form.mrrRange ? "true" : undefined} value={form.mrrRange} onChange={update} onBlur={(e) => markTouched(e.target.name)}>
-                <option value="" disabled>Select MRR</option>
-                {mrrRanges.map(s => <option key={s} value={s}>{s}</option>)}
-              </Select>
-              {touched.mrrRange && !form.mrrRange && <span className="error-text">Please select an MRR range.</span>}
-            </Section>
-            <Section className="control">
-              <Label> SaaS Deal Preferences</Label>
+              <Label>Preferred categories</Label>
               <div className="checkbox-group">
-                {categories.map(c => {
-                  const id = `cat-${c}`;
-                  const checked = form.categories.includes(c);
+                {categories.map(category => {
+                  const id = `cat-${category}`;
+                  const checked = form.categories.includes(category);
                   return (
-                    <CategoryOption key={c} htmlFor={id} data-checked={checked ? "true" : undefined}>
+                    <CategoryOption 
+                      key={category} 
+                      htmlFor={id} 
+                      data-checked={checked}
+                    >
                       <input
                         id={id}
                         type="checkbox"
-                        className="checkbox"
                         checked={checked}
-                        onChange={() => toggleCategory(c)}
+                        onChange={() => toggleCategory(category)}
                       />
-                      <span>{c}</span>
+                      <span>{category}</span>
                     </CategoryOption>
                   );
                 })}
               </div>
-              {touched.categories && form.categories.length === 0 && <span className="error-text">Select at least one preference.</span>}
-              {form.categories.some(c => c.toLowerCase().startsWith('other')) && (
-                <ExtraField className="control">
-                  <Label htmlFor="otherCategory" className="required">Other (write-in)</Label>
-                  <Input id="otherCategory" ref={otherCategoryRef} name="otherCategory" type="text" placeholder="Describe your preference" required aria-invalid={touched.otherCategory && !form.otherCategory ? "true" : undefined} value={form.otherCategory} onChange={update} onBlur={(e) => markTouched(e.target.name)} />
-                  {touched.otherCategory && !form.otherCategory && <span className="error-text">Please enter your category.</span>}
-                </ExtraField>
+              {touched.categories && form.categories.length === 0 && (
+                <span className="error-text">Select at least one category.</span>
+              )}
+              
+              {form.categories.includes('Other') && (
+                <div style={{ marginTop: '8px' }}>
+                  <Label htmlFor="otherCategory" className="required">Other category</Label>
+                  <Input 
+                    id="otherCategory" 
+                    name="otherCategory" 
+                    type="text" 
+                    placeholder="Describe your category" 
+                    required 
+                    value={form.otherCategory} 
+                    onChange={update} 
+                    onBlur={() => markTouched('otherCategory')}
+                  />
+                  {touched.otherCategory && !form.otherCategory && (
+                    <span className="error-text">Please enter your category.</span>
+                  )}
+                </div>
               )}
             </Section>
-            <ConsentSection className="control">
-              <ConsentRow className="checkbox-label">
-                <input
-                  type="checkbox"
-                  className="checkbox"
-                  checked={!!form.consentDigest}
-                  onChange={() => setForm(prev => ({ ...prev, consentDigest: !prev.consentDigest }))}
-                />
-                <span>Yes, add me to the weekly Deals Digest and send me early SaaS listings.</span>
-              </ConsentRow>
-            </ConsentSection>
+            
             <div>
               <SubmitButton
                 type="submit"
-                aria-busy={modalState.status === 'loading'}
-                disabled={
-                  modalState.status === 'loading' ||
-                  !(
-                    form.fullName &&
-                    form.email &&
-                    form.linkedInUrl &&
-                    form.buyerType &&
-                    form.geography &&
-                    form.dealSize &&
-                    form.mrrRange &&
-                    form.categories.length > 0
-                  )
-                }
+                disabled={modalState.status === 'loading' || !isFormValid()}
               >
-                {modalState.status === 'loading' && (<Spinner aria-hidden="true" />)}
-                <LabelText style={{ opacity: modalState.status === 'loading' ? 0 : 1 }}>
-                  {modalState.status === 'success' ? 'Success! Redirecting…' : 'Join as a Verified Buyer'}
-                </LabelText>
+                {modalState.status === 'loading' && <Spinner />}
+                {modalState.status === 'success' ? 'Success! Redirecting…' : 'Join as a Buyer'}
               </SubmitButton>
+              
               {modalState.status === 'error' && (
-                <ErrorBelow className="error-text">{modalState.message}</ErrorBelow>
+                <div className="error-text" style={{ marginTop: '8px' }}>
+                  {modalState.message}
+                </div>
               )}
-              <SmallNote className="subtitle">Your privacy matters to us. Takes about 30 seconds to complete.</SmallNote>
+              
+              <p className="subtitle" style={{ fontSize: '12px', margin: '8px 0 0' }}>
+                Your privacy matters to us. Takes about 30 seconds to complete.
+              </p>
             </div>
           </Form>
         </FormContainer>
@@ -502,4 +580,3 @@ export default function BuyerForm() {
     </div>
   );
 }
- 

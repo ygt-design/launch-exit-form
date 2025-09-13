@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { IconCheck, IconStar, IconClock, IconTarget } from "../components/icons";
+import { useLocation } from "react-router-dom";
 
 const fadeInUp = keyframes`
   from {
@@ -43,11 +44,23 @@ const ConfirmationContainer = styled.div`
   animation: ${fadeInUp} 0.6s ease-out;
 `;
 
+const BuyerTheme = styled.div`
+  --confirmation-primary: #00B4D8;
+  --confirmation-primary-gradient: linear-gradient(135deg, #00B4D8 0%, #0077B6 100%);
+  --confirmation-shadow-strong: rgba(0, 180, 216, 0.25);
+`;
+
+const SellerTheme = styled.div`
+  --confirmation-primary: var(--primary);
+  --confirmation-primary-gradient: var(--primary-gradient);
+  --confirmation-shadow-strong: var(--primary-shadow-strong);
+`;
+
 const SuccessIcon = styled.div`
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: var(--primary-gradient);
+  background: var(--confirmation-primary-gradient);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -65,7 +78,7 @@ const Title = styled.h1`
   font-size: 32px;
   font-weight: 700;
   margin: 0;
-  background: var(--primary-gradient);
+  background: var(--confirmation-primary-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -113,7 +126,7 @@ const NextStepsTitle = styled.h3`
   svg {
     width: 20px;
     height: 20px;
-    color: var(--primary);
+    color: var(--confirmation-primary);
   }
 `;
 
@@ -136,6 +149,11 @@ const CelebrationText = styled.div`
 
 export default function Confirmation() {
   const [showCelebration, setShowCelebration] = useState(false);
+  const location = useLocation();
+  
+  // Detect if this is from buyer or seller form based on URL params
+  const searchParams = new URLSearchParams(location.search);
+  const isBuyer = searchParams.get('buyer') === '1';
 
   useEffect(() => {
     const timer = setTimeout(() => setShowCelebration(true), 1000);
@@ -143,9 +161,12 @@ export default function Confirmation() {
   }, []);
 
 
+  const ThemeWrapper = isBuyer ? BuyerTheme : SellerTheme;
+
   return (
     <div className="container">
-      <ConfirmationContainer>
+      <ThemeWrapper>
+        <ConfirmationContainer>
         <SuccessIcon>
           <IconCheck />
         </SuccessIcon>
@@ -176,7 +197,7 @@ export default function Confirmation() {
               gap: '8px',
               height: '48px',
               padding: '0 24px',
-              background: 'var(--primary-gradient)',
+              background: 'var(--confirmation-primary-gradient)',
               color: 'white',
               border: 'none',
               borderRadius: 'var(--radius)',
@@ -187,7 +208,7 @@ export default function Confirmation() {
             }}
             onMouseEnter={(e) => {
               e.target.style.transform = 'translateY(-2px)';
-              e.target.style.boxShadow = '0 8px 20px var(--primary-shadow-strong)';
+              e.target.style.boxShadow = '0 8px 20px var(--confirmation-shadow-strong)';
               e.target.style.filter = 'brightness(1.05)';
             }}
             onMouseLeave={(e) => {
@@ -218,7 +239,8 @@ export default function Confirmation() {
             You&apos;re officially part of the future of startup exits!
           </CelebrationText>
         )}
-      </ConfirmationContainer>
+        </ConfirmationContainer>
+      </ThemeWrapper>
     </div>
   );
 }

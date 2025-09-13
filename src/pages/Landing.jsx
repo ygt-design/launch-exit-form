@@ -45,6 +45,34 @@ const Row = styled.div`
   gap: 20px;  
   align-items: center;
   margin-bottom: 0;
+  
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+`;
+
+const ButtonWrapper = styled.div`
+  @media (max-width: 480px) {
+    width: 100%;
+    
+    button {
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 14px;
+      padding: 12px 16px;
+    }
+  }
+  
+  @media (max-width: 360px) {
+    button {
+      font-size: 13px;
+      padding: 10px 12px;
+    }
+  }
 `;
 
 const Note = styled.p`
@@ -137,14 +165,18 @@ export default function Landing() {
             </ComingSoonBadge>
           </div>
           <div style={{ display: 'grid', gap: 12 }}>
-            <Header className="title" $visible={isLoaded}>What you've created is valuable. <Emphasis>Let the right buyer see its worth.</Emphasis></Header>
+            <Header className="title" $visible={isLoaded}>What you&apos;ve created is valuable. <Emphasis>Let the right buyer see its worth.</Emphasis></Header>
             <SubHeader className="subtitle" $visible={isLoaded}> We’re building the only curated marketplace designed exclusively for bootstrapped SaaS startups. Founding sellers get 0% upfront fees, verified premium buyers, and fast, transparent exits — without brokers, lock-ins, or noise from non-SaaS listings.
             <br/> <Emphasis>Join the waitlist to be first in line.</Emphasis> </SubHeader>
           </div>
           <div style={{ marginTop: '8px' }}>
             <Row role="group" aria-label="Join waitlist">
-              <button className="button primary" onClick={() => navigate("/sell")}>Join as a Founding Seller</button>
-              <button className="button secondary" onClick={() => navigate("/buy")}>Join as a Buyer</button>
+              <ButtonWrapper>
+                <button className="button primary" onClick={() => navigate("/sell")}>Join as a Founding Seller</button>
+              </ButtonWrapper>
+              <ButtonWrapper>
+                <button className="button secondary" onClick={() => navigate("/buy")}>Join as a Buyer</button>
+              </ButtonWrapper>
             </Row>
           </div>
         </HeaderSection>
