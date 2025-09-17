@@ -112,23 +112,6 @@ const NextStepsCard = styled.div`
   margin-top: 16px;
 `;
 
-const NextStepsTitle = styled.h3`
-  font-size: 18px;
-  font-weight: 600;
-  margin: 0 0 16px 0;
-  color: var(--foreground);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  text-align: center;
-  justify-content: center;
-  
-  svg {
-    width: 20px;
-    height: 20px;
-    color: var(--confirmation-primary);
-  }
-`;
 
 
 const CelebrationText = styled.div`
@@ -177,50 +160,6 @@ export default function Confirmation() {
             Welcome to the founding circle — the first members shaping our platform. We value your input and would like to optimize it to your needs.
           </Subtitle>
         </div>
-
-        <NextStepsCard>
-          <NextStepsTitle>
-            <IconClock />
-            Schedule a quick chat
-          </NextStepsTitle>
-          <p style={{ color: 'var(--muted)', fontSize: '16px', lineHeight: '1.5', margin: '0 0 24px 0' }}>
-            We&apos;re interviewing early buyers and founders to refine the marketplace experience. Share your perspective in a quick call.
-          </p>
-          <a 
-            href="https://calendly.com/your-link" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px',
-              height: '48px',
-              padding: '0 24px',
-              background: 'var(--confirmation-primary-gradient)',
-              color: 'white',
-              border: 'none',
-              borderRadius: 'var(--radius)',
-              fontWeight: '600',
-              textDecoration: 'none',
-              transition: 'all 0.2s ease',
-              minWidth: '200px'
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.transform = 'translateY(-2px)';
-              e.target.style.boxShadow = '0 8px 20px var(--confirmation-shadow-strong)';
-              e.target.style.filter = 'brightness(1.05)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.transform = 'translateY(0)';
-              e.target.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
-              e.target.style.filter = 'brightness(1)';
-            }}
-          >
-            <IconTarget />
-            Book a quick chat now
-          </a>
-        </NextStepsCard>
 
         {/* <ActionButtons>
           <PrimaryButton to={isSeller ? "/buy" : "/sell"}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import sellerData from "../data/seller.json";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -15,7 +15,12 @@ const Form = styled.form`
 const Section = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
+  margin-bottom: 16px;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
 `;
 
 const Label = styled.label`
@@ -83,7 +88,7 @@ const FormContainer = styled.div`
 const FormLayout = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 24px;
   width: 100%;
   
   @media (max-width: 1024px) {
@@ -149,20 +154,21 @@ const InlineLink = styled.button`
 
 const StageProgressBar = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  margin-bottom: 32px;
+  gap: 24px;
+  margin-bottom: 40px;
   padding: 0 8px;
   
   @media (max-width: 768px) {
-    justify-content: center;
-    gap: 12px;
-    margin-bottom: 24px;
+    gap: 20px;
+    margin-bottom: 32px;
     padding: 0 16px;
   }
   
   @media (max-width: 480px) {
-    gap: 8px;
+    gap: 16px;
+    margin-bottom: 24px;
     padding: 0 8px;
   }
 `;
@@ -173,9 +179,9 @@ const Stage = styled.div`
   align-items: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  padding: 8px;
+  padding: 12px 16px;
   border-radius: 8px;
-  min-width: 70px;
+  min-width: 80px;
   font-weight: 400;
   
   @media (max-width: 768px) {
@@ -262,30 +268,8 @@ const StageLabel = styled.span`
   }
 `;
 
-const StageConnector = styled.div`
-  flex: 1;
-  height: 2px;
-  background: var(--border);
-  margin: 0 8px;
-  position: relative;
-  
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    background: var(--primary);
-    width: ${props => props.progress}%;
-    transition: width 0.3s ease;
-  }
-  
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
 
-const { mrrBands, growthRates, churnRates, teamSizes, monthlyCosts, acquisitionChannels, priceRanges, sellingReasons } = sellerData;
+const { mrrBands, growthRates, churnRates, teamSizes, monthlyCosts, acquisitionChannels, priceRanges } = sellerData;
 
 export default function SellerForm() {
   const navigate = useNavigate();
@@ -324,11 +308,8 @@ export default function SellerForm() {
 
   // Stage definitions
   const stages = [
-    { id: 1, label: "Basics", fields: ['fullName', 'email', 'startupName', 'productUrl', 'oneLiner'] },
-    { id: 2, label: "Business", fields: ['mrr', 'growth', 'churn'] },
-    { id: 3, label: "Operations", fields: ['teamSize', 'monthlyCost', 'acquisition'] },
-    { id: 4, label: "Deal Info", fields: ['priceRange', 'reason'] },
-    { id: 5, label: "Optional", fields: ['techStack', 'whyBuyerLikes', 'linkedIn'] }
+    { id: 1, label: "Company & Business", fields: ['fullName', 'email', 'startupName', 'productUrl', 'oneLiner', 'mrr', 'growth', 'churn'] },
+    { id: 2, label: "Operations & Deal", fields: ['teamSize', 'monthlyCost', 'acquisition', 'priceRange', 'reason', 'techStack', 'whyBuyerLikes', 'linkedIn'] }
   ];
 
   // Check if a step is completed
@@ -347,6 +328,24 @@ export default function SellerForm() {
     });
     setCompletedSteps(newCompletedSteps);
   }, [form]);
+
+  // Scroll to top when step changes
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, [step]);
+
+  // Additional scroll to top with delay as fallback
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }, 0);
+    
+    return () => clearTimeout(timeoutId);
+  }, [step]);
 
   // Navigate to a specific step
   const handleStepClick = (targetStep) => {
@@ -456,43 +455,42 @@ export default function SellerForm() {
     // Enhanced validation with proper field validation
     const stepValid = {
       1: () => {
-        const fields = ['fullName', 'email', 'startupName', 'productUrl', 'oneLiner'];
+        const fields = ['fullName', 'email', 'startupName', 'productUrl', 'oneLiner', 'mrr', 'growth', 'churn'];
         return fields.every(field => form[field] && validateField(field, form[field]));
       },
-      2: () => form.mrr && form.growth && form.churn,
-      3: () => form.teamSize && form.monthlyCost && form.acquisition,
-      4: () => form.priceRange && form.reason,
-      5: () => true,
+      2: () => {
+        const requiredFields = ['teamSize', 'monthlyCost', 'acquisition', 'priceRange', 'reason'];
+        return requiredFields.every(field => form[field] && validateField(field, form[field]));
+      },
     }[step]();
     
     if (!stepValid) {
       const map = {
-        1: { fullName: true, email: true, startupName: true, productUrl: true, oneLiner: true },
-        2: { mrr: true, growth: true, churn: true },
-        3: { teamSize: true, monthlyCost: true, acquisition: true },
-        4: { priceRange: true, reason: true },
-        5: {},
+        1: { fullName: true, email: true, startupName: true, productUrl: true, oneLiner: true, mrr: true, growth: true, churn: true },
+        2: { teamSize: true, monthlyCost: true, acquisition: true, priceRange: true, reason: true },
       };
       setTouched(prev => ({ ...prev, ...map[step] }));
       
       // Focus on first invalid field
       if (step === 1) {
-        const fields = ['fullName', 'email', 'startupName', 'productUrl', 'oneLiner'];
+        const fields = ['fullName', 'email', 'startupName', 'productUrl', 'oneLiner', 'mrr', 'growth', 'churn'];
         const firstInvalidField = fields.find(field => !form[field] || !validateField(field, form[field]));
-        const refs = { fullName: fullNameRef, email: emailRef, startupName: startupNameRef, productUrl: productUrlRef, oneLiner: oneLinerRef };
+        const refs = { fullName: fullNameRef, email: emailRef, startupName: startupNameRef, productUrl: productUrlRef, oneLiner: oneLinerRef, mrr: mrrRef, growth: growthRef, churn: churnRef };
         if (firstInvalidField && refs[firstInvalidField]?.current) {
           refs[firstInvalidField].current.focus();
         }
-      } else {
-        // For other steps, focus on first empty field
-        if (step === 2) { if (!form.mrr && mrrRef.current) mrrRef.current.focus(); else if (!form.growth && growthRef.current) growthRef.current.focus(); else if (!form.churn && churnRef.current) churnRef.current.focus(); }
-        if (step === 3) { if (!form.teamSize && teamRef.current) teamRef.current.focus(); else if (!form.monthlyCost && costRef.current) costRef.current.focus(); else if (!form.acquisition && acquisitionRef.current) acquisitionRef.current.focus(); }
-        if (step === 4) { if (!form.priceRange && priceRef.current) priceRef.current.focus(); else if (!form.reason && reasonRef.current) reasonRef.current.focus(); }
+      } else if (step === 2) {
+        const fields = ['teamSize', 'monthlyCost', 'acquisition', 'priceRange', 'reason'];
+        const firstInvalidField = fields.find(field => !form[field] || !validateField(field, form[field]));
+        const refs = { teamSize: teamRef, monthlyCost: costRef, acquisition: acquisitionRef, priceRange: priceRef, reason: reasonRef };
+        if (firstInvalidField && refs[firstInvalidField]?.current) {
+          refs[firstInvalidField].current.focus();
+        }
       }
       return;
     }
     
-    if (step < 5) {
+    if (step < 2) {
       setStep(step + 1);
     }
   };
@@ -507,7 +505,7 @@ export default function SellerForm() {
     e.preventDefault();
     
     // Only submit on the last step
-    if (step !== 5) {
+    if (step !== 2) {
       handleNext();
       return;
     }
@@ -578,7 +576,7 @@ export default function SellerForm() {
           <Description className="subtitle">Share just the basics today — we&apos;ll draft your unique deal snapshot, earn you a &apos;verified seller&apos; badge that builds buyer trust, and match you instantly with the right leads.</Description>
         </div>
         <StageProgressBar>
-          {stages.map((stage, index) => {
+          {stages.map((stage) => {
             const isCompleted = completedSteps.has(stage.id);
             const isCurrent = step === stage.id;
             const canNavigate = isCompleted || stage.id === Math.min(...stages.filter(s => !completedSteps.has(s.id)).map(s => s.id));
@@ -601,9 +599,6 @@ export default function SellerForm() {
                   <StageNumber>{isCompleted ? <IconCheck /> : stage.id}</StageNumber>
                   <StageLabel>{stage.label}</StageLabel>
                 </Stage>
-                {index < stages.length - 1 && (
-                  <StageConnector progress={index < step - 1 ? 100 : 0} />
-                )}
               </React.Fragment>
             );
           })}
@@ -641,10 +636,6 @@ export default function SellerForm() {
                   {touched.oneLiner && !form.oneLiner && <span className="error-text">Please add a short one-liner.</span>}
                   {getErrorMessage('oneLiner', form.oneLiner) && <span className="error-text">{getErrorMessage('oneLiner', form.oneLiner)}</span>}
                 </Section>
-              </>
-            )}
-            {step === 2 && (
-              <>
                 <Section className="control">
                   <Label htmlFor="mrr" className="required">Monthly Recurring Revenue (MRR)</Label>
                   <Select id="mrr" ref={mrrRef} name="mrr" required aria-invalid={touched.mrr && !form.mrr ? "true" : undefined} value={form.mrr} onChange={update} onBlur={(e) => markTouched(e.target.name)}>
@@ -662,7 +653,7 @@ export default function SellerForm() {
                   {touched.growth && !form.growth && <span className="error-text">Please select growth.</span>}
                 </Section>
                 <Section className="control">
-                  <Label htmlFor="churn" className="required">Churn (monthly, rough)</Label>
+                  <Label htmlFor="churn" className="required">Churn (last 6–12 months)</Label>
                   <Select id="churn" ref={churnRef} name="churn" required aria-invalid={touched.churn && !form.churn ? "true" : undefined} value={form.churn} onChange={update} onBlur={(e) => markTouched(e.target.name)}>
                     <option value="" disabled>Select churn</option>
                     {churnRates.map(s => <option key={s} value={s}>{s}</option>)}
@@ -671,7 +662,7 @@ export default function SellerForm() {
                 </Section>
               </>
             )}
-            {step === 3 && (
+            {step === 2 && (
               <>
                 <Section className="control">
                   <Label htmlFor="teamSize" className="required">Team Size</Label>
@@ -682,25 +673,21 @@ export default function SellerForm() {
                   {touched.teamSize && !form.teamSize && <span className="error-text">Please select team size.</span>}
                 </Section>
                 <Section className="control">
-                  <Label htmlFor="monthlyCost" className="required">Monthly Costs (infra + tools)</Label>
+                  <Label htmlFor="monthlyCost" className="required">Monthly Operating Costs</Label>
                   <Select id="monthlyCost" ref={costRef} name="monthlyCost" required aria-invalid={touched.monthlyCost && !form.monthlyCost ? "true" : undefined} value={form.monthlyCost} onChange={update} onBlur={(e) => markTouched(e.target.name)}>
-                    <option value="" disabled>Select costs</option>
+                    <option value="" disabled>Select monthly costs</option>
                     {monthlyCosts.map(s => <option key={s} value={s}>{s}</option>)}
                   </Select>
                   {touched.monthlyCost && !form.monthlyCost && <span className="error-text">Please select monthly costs.</span>}
                 </Section>
                 <Section className="control">
-                  <Label htmlFor="acquisition" className="required">Primary Acquisition Channel</Label>
+                  <Label htmlFor="acquisition" className="required">Customer Acquisition</Label>
                   <Select id="acquisition" ref={acquisitionRef} name="acquisition" required aria-invalid={touched.acquisition && !form.acquisition ? "true" : undefined} value={form.acquisition} onChange={update} onBlur={(e) => markTouched(e.target.name)}>
-                    <option value="" disabled>Select channel</option>
+                    <option value="" disabled>Select acquisition method</option>
                     {acquisitionChannels.map(s => <option key={s} value={s}>{s}</option>)}
                   </Select>
-                  {touched.acquisition && !form.acquisition && <span className="error-text">Please select a channel.</span>}
+                  {touched.acquisition && !form.acquisition && <span className="error-text">Please select acquisition method.</span>}
                 </Section>
-              </>
-            )}
-            {step === 4 && (
-              <>
                 <Section className="control">
                   <Label htmlFor="priceRange" className="required">Asking Price Range</Label>
                   <Select id="priceRange" ref={priceRef} name="priceRange" required aria-invalid={touched.priceRange && !form.priceRange ? "true" : undefined} value={form.priceRange} onChange={update} onBlur={(e) => markTouched(e.target.name)}>
@@ -710,17 +697,10 @@ export default function SellerForm() {
                   {touched.priceRange && !form.priceRange && <span className="error-text">Please select a price range.</span>}
                 </Section>
                 <Section className="control">
-                  <Label htmlFor="reason" className="required">Reason for Selling</Label>
-                  <Select id="reason" ref={reasonRef} name="reason" required aria-invalid={touched.reason && !form.reason ? "true" : undefined} value={form.reason} onChange={update} onBlur={(e) => markTouched(e.target.name)}>
-                    <option value="" disabled>Select reason</option>
-                    {sellingReasons.map(s => <option key={s} value={s}>{s}</option>)}
-                  </Select>
-                  {touched.reason && !form.reason && <span className="error-text">Please select a reason.</span>}
+                  <Label htmlFor="reason" className="required">Why Selling?</Label>
+                  <Input id="reason" ref={reasonRef} name="reason" type="text" placeholder="Brief reason for selling" required aria-invalid={touched.reason && !form.reason ? "true" : undefined} value={form.reason} onChange={update} onBlur={(e) => markTouched(e.target.name)} />
+                  {touched.reason && !form.reason && <span className="error-text">Please provide a reason for selling.</span>}
                 </Section>
-              </>
-            )}
-            {step === 5 && (
-              <>
                 <Section className="control">
                   <Label htmlFor="techStack">Tech Stack (optional)</Label>
                   <Input id="techStack" name="techStack" type="text" placeholder="Next.js, Postgres, Cloudflare, Stripe" value={form.techStack} onChange={update} onBlur={(e) => markTouched(e.target.name)} />
@@ -730,8 +710,8 @@ export default function SellerForm() {
                   <Input id="whyBuyerLikes" name="whyBuyerLikes" type="text" placeholder="E.g., strong retention, low churn, profitable with low overheads" value={form.whyBuyerLikes} onChange={update} onBlur={(e) => markTouched(e.target.name)} />
                 </Section>
                 <Section className="control">
-                  <Label htmlFor="linkedIn">LinkedIn (optional)</Label>
-                  <Input id="linkedIn" name="linkedIn" type="url" inputMode="url" placeholder="https://www.linkedin.com/in/username" value={form.linkedIn} onChange={update} onBlur={(e) => markTouched(e.target.name)} />
+                  <Label htmlFor="linkedIn">LinkedIn Profile (optional)</Label>
+                  <Input id="linkedIn" name="linkedIn" type="url" placeholder="https://linkedin.com/in/yourname" value={form.linkedIn} onChange={update} onBlur={(e) => markTouched(e.target.name)} />
                 </Section>
               </>
             )}
@@ -743,7 +723,7 @@ export default function SellerForm() {
                   <div></div>
                 )}
                 
-                {step < 5 ? (
+                {step < 2 ? (
                   <SubmitButton
                     type="submit"
                     aria-busy={modalState.status === 'loading'}

@@ -127,23 +127,6 @@ const ThemeScope = styled.div`
   --primary-shadow-weak: rgba(0, 180, 216, 0.15);
 `;
 
-const ProgressBar = styled.div`
-  width: 100%;
-  height: 4px;
-  background: var(--border);
-  border-radius: 2px;
-  overflow: hidden;
-  margin-bottom: 8px;
-`;
-
-const ProgressFill = styled.div`
-  height: 100%;
-  background: var(--primary-gradient);
-  border-radius: 2px;
-  transition: width 0.3s ease;
-  width: ${props => props.progress}%;
-`;
-
 const CategoryOption = styled.label`
   display: inline-flex;
   align-items: center;
@@ -406,10 +389,7 @@ export default function BuyerForm() {
           </div>
           
           <Form onSubmit={onSubmit} noValidate>
-            <ProgressBar>
-              <ProgressFill progress={calculateProgress()} />
-            </ProgressBar>
-            
+          
             <Section className="control">
               <Label htmlFor="email" className="required">E‑mail</Label>
               <Input 

@@ -10,15 +10,6 @@ const FooterContainer = styled.footer`
   margin-top: 80px;
   padding: 0 12px 32px;
   
-  @media (max-width: 768px) {
-    margin-top: 60px;
-    padding: 0 16px 24px;
-  }
-  
-  @media (max-width: 480px) {
-    margin-top: 40px;
-    padding: 0 16px 20px;
-  }
 `;
 
 const FooterContent = styled.div`
@@ -38,12 +29,10 @@ const FooterIsland = styled.div`
   
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    gap: 20px;
-    text-align: center;
+    padding: 0;
   }
   
   @media (max-width: 480px) {
-    padding: 20px 16px;
     gap: 16px;
   }
 `;
