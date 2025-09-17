@@ -35,7 +35,7 @@ const Island = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 20px 20px;
+  padding: 15px 20px;
   border: 1px solid var(--border);
   border-radius: 14px;
   background: rgba(17, 19, 21, 0.7);
@@ -49,6 +49,7 @@ const Island = styled.div`
     padding: 18px 16px;
   }
 `
+
 
 const Logo = styled.img`
   height: 12px;
@@ -65,11 +66,16 @@ const RightLink = styled.a`
   color: #ffffff;
   text-decoration: none;
   font-size: 14px;
+  padding: 6px 0px;
+  border-radius: 6px;
   opacity: 0.9;
-  transition: opacity 160ms ease, transform 160ms ease;
-  will-change: opacity, transform;
+  transition: all 160ms ease;
   
-  &:hover { opacity: 1; transform: translateY(-0.5px); }
+  &:hover {
+    background: rgba(255, 76, 0, 0.15);
+    padding: 6px 12px;
+    border-color: rgba(255, 76, 0, 0.4);
+  }
 `
 
 const Spacer = styled.div`
@@ -86,7 +92,7 @@ export default function Navbar() {
             <Link to="/" aria-label="Go to homepage">
               <Logo src={logoUrl} alt="LaunchExit" />
             </Link>
-            <RightLink href="#" onClick={(e) => e.preventDefault()}>Join our team →</RightLink>
+            <RightLink href="mailto:hello@launchexit.com">Contact Us</RightLink>
           </Island>
         </Inner>
       </Bar>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import buyerData from "../data/buyer.json";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -197,24 +197,6 @@ const CategoryOption = styled.label`
   }
 `;
 
-const ConsentRow = styled.label`
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-  cursor: pointer;
-  line-height: 1.5;
-  font-size: 14px;
-  
-  input[type="checkbox"] {
-    margin-top: 2px;
-    flex-shrink: 0;
-  }
-  
-  @media (max-width: 480px) {
-    gap: 8px;
-    font-size: 13px;
-  }
-`;
 
 const SubmitButton = styled.button.attrs({ className: "button primary" })`
   width: 100%;
@@ -264,19 +246,9 @@ const Spinner = styled.div`
   }
 `;
 
-const ErrorText = styled.span`
-  color: #ef4444;
-  font-size: 12px;
-  margin-top: 4px;
-  display: block;
-`;
 
-const OptionalNote = styled.span`
-  opacity: 0.7;
-  font-weight: normal;
-`;
 
-const { buyerTypes, dealSizes, geographies, mrrRanges, categories, timelines } = buyerData;
+const { buyerTypes, dealSizes, categories, timelines } = buyerData;
 
 export default function BuyerForm() {
   const navigate = useNavigate();

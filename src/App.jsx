@@ -6,23 +6,34 @@ import BuyerForm from './pages/BuyerForm.jsx'
 import Confirmation from './pages/Confirmation.jsx'
 import { GlobalStyle } from './styles/GlobalStyle.js'
 import Navbar from './components/Navbar.jsx'
+import Footer from './components/Footer.jsx'
 
 export default function App() {
   const location = useLocation();
 
-  // Ensure browser doesn't restore scroll position automatically
-  useEffect(() => {
-    if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
-      const previous = window.history.scrollRestoration;
-      window.history.scrollRestoration = 'manual';
-      return () => { window.history.scrollRestoration = previous; };
-    }
-  }, []);
-
-  // Scroll to top on every navigation (HashRouter friendly)
+  // Scroll to top on every navigation for HashRouter
   useLayoutEffect(() => {
-    try { window.scrollTo({ top: 0, left: 0, behavior: 'auto' }); } catch { window.scrollTo(0, 0); }
-  }, [location.key]);
+    // Force scroll to top before browser paints
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, [location.pathname]);
+
+  useEffect(() => {
+    // Additional scroll after component mounts
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    
+    // Try again after a short delay
+    const timeoutId = setTimeout(() => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }, 0);
+    
+    return () => clearTimeout(timeoutId);
+  }, [location.pathname]);
 
   return (
     <>
@@ -35,6 +46,7 @@ export default function App() {
         <Route path="/thanks" element={<Confirmation />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      <Footer />
     </>
   )
 }
